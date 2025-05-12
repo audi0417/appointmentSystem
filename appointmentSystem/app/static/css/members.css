@@ -1,108 +1,122 @@
-/* ===== 會員列表表格 ===== */
+/* ===== 會員管理頁面樣式 ===== */
+@import 'variables.css';
+
+/* === 會員表格容器 === */
 .members-table {
     overflow-x: auto;
+    background-color: var(--card-background);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-6);
 }
 
-.table {
-    margin-bottom: 0;
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.table th {
-    background: #f8f9fa;
-    padding: 12px;
-    font-weight: 600;
-    color: #555;
-    border-bottom: 2px solid #dee2e6;
-}
-
-.table td {
-    padding: 15px 12px;
-    vertical-align: middle;
-    border-bottom: 1px solid #edf2f7;
-}
-
-/* 會員資料卡片 */
+/* === 會員資料卡片 === */
 .member-info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
-.member-avatar {
+.member-avatar img {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    background-color: #f8f9fa;
+    background-color: var(--neutral-200);
+}
+
+.member-details {
+    line-height: var(--line-height-tight);
 }
 
 .member-name {
-    font-weight: 500;
-    color: #2d3748;
-    margin-bottom: 2px;
+    font-weight: var(--font-weight-medium);
+    color: var(--neutral-800);
+    margin-bottom: var(--space-1);
 }
 
 .member-id {
-    font-size: 0.85rem;
-    color: #718096;
+    font-size: var(--font-size-sm);
+    color: var(--neutral-600);
 }
 
-/* 會員等級 */
+/* === 聯絡方式 === */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.contact-info > div {
+    line-height: var(--line-height-tight);
+}
+
+/* === 會員等級 === */
 .member-level {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 500;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    min-width: 80px;
 }
 
 .member-level.normal {
-    background-color: #edf2f7;
-    color: #4a5568;
+    background-color: var(--neutral-200);
+    color: var(--neutral-700);
 }
 
 .member-level.vip {
-    background-color: #fdf6b2;
-    color: #975a16;
+    background-color: #fdf6b2; /* 特殊黃金色 */
+    color: #975a16; /* 深褐色 */
 }
 
-/* 消費統計 */
+/* === 消費統計 === */
 .consumption-stats {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-1);
 }
 
 .stats-item {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: var(--font-size-sm);
 }
 
 .stats-label {
-    color: #718096;
+    color: var(--neutral-600);
+    margin-right: var(--space-2);
 }
 
 .stats-value {
-    color: #2d3748;
-    font-weight: 500;
+    color: var(--neutral-800);
+    font-weight: var(--font-weight-medium);
 }
 
-/* 響應式調整 */
+/* === 批量操作 === */
+.bulk-actions {
+    margin-bottom: var(--space-4);
+    padding: var(--space-3);
+    background-color: var(--neutral-100);
+    border-radius: var(--radius-md);
+    display: none;
+}
+
+/* === 響應式調整 === */
 @media (max-width: 768px) {
-    .table {
-        font-size: 0.9rem;
-    }
-    
     .member-info {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: var(--space-2);
+    }
+    
+    .member-avatar img {
+        width: 36px;
+        height: 36px;
     }
 }
 
