@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品集 - 美甲預約系統</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- 系統樣式 -->
+    <link href="{{ url_for('static', filename='css/common.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/portfolio.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="portfolio-page">
+        <!-- 頁面標題區 -->
+        <div class="page-header">
+            <h2>作品集</h2>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#portfolioFormModal">
+                <i class="fas fa-plus"></i> 新增作品
+            </button>
+        </div>
+
+        <!-- 篩選工具列 -->
+        <div class="filter-tools">
+            <div class="filter-toolbar">
+                <div class="filter-group">
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">所有類別</option>
+                        <option value="art">造型設計</option>
+                        <option value="simple">基礎款式</option>
+                        <option value="wedding">婚禮系列</option>
+                        <option value="season">季節限定</option>
+                    </select>
+                    <select class="form-select" id="statusFilter">
+                        <option value="">所有狀態</option>
+                        <option value="active">展示中</option>
+                        <option value="inactive">已下架</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" placeholder="搜尋作品名稱...">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 作品網格 -->
+        <div class="portfolio-grid">
+            <!-- 作品卡片範例 -->
+            <div class="portfolio-card">
+                <div class="portfolio-image">
+                    <img src="春季櫻花款.jpg" alt="春季櫻花款">
+                    <span class="portfolio-status active">展示中</span>
+                </div>
+                <div class="portfolio-content">
+                    <h3 class="portfolio-title">春季櫻花款</h3>
+                    <div class="portfolio-meta">
+                        <span class="category">造型設計</span>
+                        <span class="date">2024-03-15</span>
+                    </div>
+                    <p class="portfolio-description">
+                        粉嫩櫻花設計，搭配細緻珍珠裝飾，完美呈現春天氛圍。
+                    </p>
+                    <div class="portfolio-tags">
+                        <span class="tag">櫻花</span>
+                        <span class="tag">春季限定</span>
+                        <span class="tag">珍珠</span>
+                    </div>
+                </div>
+                <div class="portfolio-actions">
+                    <button class="action-btn edit" data-bs-toggle="modal" data-bs-target="#portfolioFormModal">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn delete">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                    <button class="action-btn toggle">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 更多作品卡片 -->
+        </div>
+    </div>
+
+    <!-- 新增/編輯作品 Modal -->
+    <div class="modal fade" id="portfolioFormModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">新增作品</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="portfolioForm">
+                        <div class="form-section">
+                            <h6>基本資訊</h6>
+                            <div class="mb-3">
+                                <label class="form-label">作品名稱</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">作品類別</label>
+                                    <select class="form-select" required>
+                                        <option value="art">造型設計</option>
+                                        <option value="simple">基礎款式</option>
+                                        <option value="wedding">婚禮系列</option>
+                                        <option value="season">季節限定</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">展示狀態</label>
+                                    <select class="form-select">
+                                        <option value="active">展示中</option>
+                                        <option value="inactive">下架</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h6>作品說明</h6>
+                            <div class="mb-3">
+                                <label class="form-label">作品描述</label>
+                                <textarea class="form-control" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">標籤</label>
+                                <input type="text" class="form-control" placeholder="使用逗號分隔多個標籤">
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h6>作品圖片</h6>
+                            <div class="mb-3">
+                                <label class="form-label">上傳圖片</label>
+                                <input type="file" class="form-control" accept="image/*" multiple>
+                            </div>
+                            <div class="image-preview-container">
+                                <!-- 預覽圖片將在此顯示 -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" form="portfolioForm" class="btn btn-primary">儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 系統功能 -->
+    <script src="{{ url_for('static', filename='/js/portfolio.js') }}"></script>
+</body>
+</html>

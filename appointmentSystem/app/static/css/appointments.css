@@ -1,0 +1,108 @@
+/* ===== 預約列表表格 ===== */
+.appointments-table {
+    overflow-x: auto;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+/* 客戶資訊 */
+.customer-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.customer-info img {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.customer-info .details {
+    line-height: 1.3;
+}
+
+.customer-info .name {
+    font-weight: 500;
+    color: #333;
+}
+
+.customer-info .phone {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* 預約狀態 */
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.confirmed {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-badge.completed {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* 預約詳情 */
+.appointment-details {
+    padding: 15px;
+}
+
+.details-group {
+    margin-bottom: 20px;
+}
+
+.details-group h6 {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.details-group p {
+    margin: 0;
+    color: #333;
+    font-weight: 500;
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        min-width: 90px;
+        font-size: 0.8rem;
+    }
+
+    .customer-info img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 576px) {
+    .table th:nth-child(4),
+    .table td:nth-child(4),
+    .table th:nth-child(6),
+    .table td:nth-child(6) {
+        display: none;
+    }
+
+    .customer-info .phone {
+        display: none;
+    }
+}

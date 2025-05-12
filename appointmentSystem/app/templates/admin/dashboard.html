@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 載入 FullCalendar 的 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard-content">
+        <!-- 統計卡片區域 -->
+        <div class="summary-cards">
+            <div class="card">
+                <div class="card-icon" style="background-color: #FFE4E1;">
+                    <!-- Icon placeholder -->
+                </div>
+                <div class="card-info" data-type="todayBookings">
+                    <h3>今日預約</h3>
+                    <div class="number">8</div>
+                    <div class="trend positive">+12.5%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon" style="background-color: #E6E6FA;">
+                    <!-- Icon placeholder -->
+                </div>
+                <div class="card-info" data-type="newMembers">
+                    <h3>本月新會員</h3>
+                    <div class="number">24</div>
+                    <div class="trend positive">+18.2%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon" style="background-color: #F0FFF0;">
+                    <!-- Icon placeholder -->
+                </div>
+                <div class="card-info" data-type="monthlyRevenue">
+                    <h3>本月營收</h3>
+                    <div class="number">$52,680</div>
+                    <div class="trend positive">+8.4%</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-icon" style="background-color: #FFF0F5;">
+                    <!-- Icon placeholder -->
+                </div>
+                <div class="card-info" data-type="avgRating">
+                    <h3>平均評分</h3>
+                    <div class="number">4.8</div>
+                    <div class="trend neutral">持平</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要內容網格 -->
+        <div class="dashboard-grid">
+            <!-- 行事曆區域 -->
+            <div class="calendar-section">
+                <div class="section-header">
+                    <h2>預約行事曆</h2>
+                    <button class="btn btn-primary btn-new">新增預約</button>
+                </div>
+                <div id="calendar"></div>
+            </div>
+
+            <!-- 待辦事項區域 -->
+            <div class="tasks-section">
+                <div class="section-header">
+                    <h2>待辦事項</h2>
+                    <button class="btn btn-primary btn-new">新增事項</button>
+                </div>
+                <div class="tasks-list">
+                    <div class="task-item" data-id="1">
+                        <div class="task-content">
+                            <input type="checkbox">
+                            <span>聯絡陳小姐確認明天的預約時間</span>
+                        </div>
+                        <div class="task-meta">
+                            <span class="priority high">高優先</span>
+                            <span class="due-time">14:00</span>
+                        </div>
+                    </div>
+
+                    <div class="task-item" data-id="2">
+                        <div class="task-content">
+                            <input type="checkbox">
+                            <span>補充指緣油庫存</span>
+                        </div>
+                        <div class="task-meta">
+                            <span class="priority medium">中優先</span>
+                            <span class="due-time">今天</span>
+                        </div>
+                    </div>
+
+                    <div class="task-item" data-id="3">
+                        <div class="task-content">
+                            <input type="checkbox">
+                            <span>更新作品集照片</span>
+                        </div>
+                        <div class="task-meta">
+                            <span class="priority low">低優先</span>
+                            <span class="due-time">本週</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第二個網格區域 -->
+        <div class="dashboard-grid">
+            <!-- 最新預約區域 -->
+            <div class="recent-bookings">
+                <div class="section-header">
+                    <h2>最新預約</h2>
+                    <a href="#appointments" class="view-all">查看全部</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>客戶名稱</th>
+                                <th>預約項目</th>
+                                <th>預約時間</th>
+                                <th>狀態</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-id="1">
+                                <td class="customer-info">
+                                    <img src="avatar1.png" alt="Customer" class="avatar">
+                                    林小姐
+                                </td>
+                                <td>基礎保養 + 凝膠</td>
+                                <td>2024/11/25 14:30</td>
+                                <td><span class="status pending">待確認</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-confirm">確認</button>
+                                    <button class="btn btn-sm btn-cancel">取消</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 銷售分析區域 -->
+            <div class="sales-analytics">
+                <div class="section-header">
+                    <h2>銷售分析</h2>
+                    <div class="period-selector">
+                        <button class="active">週</button>
+                        <button>月</button>
+                        <button>年</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 載入必要的 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/zh-tw.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='/js/dashboard.js') }}"></script>
+</body>
+</html>

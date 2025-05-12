@@ -1,0 +1,36 @@
+nail_salon/
+├── app/
+│   ├── static/                    # 靜態文件
+│   │   ├── css/
+│   │   │   ├── style.css         # 主要樣式
+│   │   │   └── admin.css         # 管理後台樣式
+│   │   ├── js/
+│   │   │   ├── main.js           # 主要腳本
+│   │   │   └── admin.js          # 管理後台腳本
+│   │   └── images/               # 圖片資源
+│   │
+│   ├── templates/                 # 模板文件
+│   │   ├── base.html             # 基礎模板
+│   │   ├── home/                 # 前台頁面
+│   │   │   ├── index.html        # 首頁
+│   │   │   ├── booking.html      # 預約頁面
+│   │   │   ├── services.html     # 服務介紹
+│   │   │   └── portfolio.html    # 作品展示
+│   │   │
+│   │   └── admin/                # 後台頁面
+│   │       ├── dashboard.html     # 儀表板
+│   │       ├── appointments.html  # 預約管理
+│   │       ├── members.html       # 會員管理
+│   │       └── services.html      # 服務管理
+│   │
+│   ├── models.py                 # 數據模型
+│   ├── forms.py                  # 表單類
+│   ├── views/                    # 視圖函數
+│   │   ├── home.py              # 前台路由
+│   │   └── admin.py             # 後台路由
+│   │
+│   └── __init__.py              # 應用工廠
+│
+├── config.py                     # 配置文件
+├── requirements.txt              # 依賴清單
+└── run.py                        # 啟動文件

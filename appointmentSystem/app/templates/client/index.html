@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="美甲預約系統">
+    <meta name="keywords" content="美甲,預約,美甲預約">
+    <title>美甲預約系統</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="progress-bar">
+            <div class="progress-step active">1</div>
+            <div class="progress-step">2</div>
+            <div class="progress-step">3</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Step 1: Service Selection -->
+        <section id="step1" class="step">
+            <h2>選擇服務</h2>
+            <div class="service-grid">
+                <div class="service-card" data-service="basic">
+                    <img src="https://via.placeholder.com/300x200" alt="基礎美甲">
+                    <div class="service-info">
+                        <h3 class="service-title">基礎美甲</h3>
+                        <p class="service-price">NT$ 800</p>
+                        <p>基礎保養 + 單色凝膠</p>
+                    </div>
+                </div>
+                <div class="service-card" data-service="art">
+                    <img src="https://via.placeholder.com/300x200" alt="凝膠美甲">
+                    <div class="service-info">
+                        <h3 class="service-title">凝膠美甲</h3>
+                        <p class="service-price">NT$ 1200</p>
+                        <p>基礎保養 + 造型凝膠</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 2: Date Selection -->
+        <section id="step2" class="step" style="display: none;">
+            <h2>選擇日期與時間</h2>
+            <div class="date-picker">
+                <input type="text" id="datepicker" placeholder="選擇日期">
+                <div class="time-slots">
+                    <div class="time-slot">10:00</div>
+                    <div class="time-slot">11:00</div>
+                    <div class="time-slot">13:00</div>
+                    <div class="time-slot">14:00</div>
+                    <div class="time-slot">15:00</div>
+                    <div class="time-slot">16:00</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Step 3: Confirmation -->
+        <section id="step3" class="step" style="display: none;">
+            <h2>確認預約資訊</h2>
+            <div class="confirmation">
+                <div class="form-group">
+                    <label>姓名</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label>電話</label>
+                    <input type="tel" id="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>備註</label>
+                    <textarea id="note" rows="3"></textarea>
+                </div>
+                <div class="booking-summary">
+                    <h3>預約明細</h3>
+                    <p id="selected-service"></p>
+                    <p id="selected-datetime"></p>
+                    <p id="total-price"></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="buttons">
+            <button id="prevBtn" class="btn btn-outline" style="display: none;">上一步</button>
+            <button id="nextBtn" class="btn btn-primary">下一步</button>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/flatpickr.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
