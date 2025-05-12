@@ -1,0 +1,206 @@
+/* === 統一排版樣式 === */
+@import 'variables.css';
+
+/* === 基礎排版 === */
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--neutral-800);
+}
+
+/* === 標題樣式 === */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--neutral-900);
+}
+
+h1, .h1 {
+  font-size: var(--font-size-3xl);
+}
+
+h2, .h2 {
+  font-size: var(--font-size-2xl);
+}
+
+h3, .h3 {
+  font-size: var(--font-size-xl);
+}
+
+h4, .h4 {
+  font-size: var(--font-size-lg);
+}
+
+h5, .h5 {
+  font-size: var(--font-size-md);
+}
+
+h6, .h6 {
+  font-size: var(--font-size-sm);
+}
+
+.section-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--neutral-800);
+  margin-bottom: var(--space-4);
+}
+
+.subsection-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--neutral-700);
+  margin-bottom: var(--space-3);
+}
+
+/* === 段落樣式 === */
+p {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+}
+
+.lead {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-light);
+}
+
+/* === 文本對齊 === */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* === 文本變形 === */
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
+}
+
+/* === 文本顏色 === */
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-success {
+  color: var(--success-color);
+}
+
+.text-danger {
+  color: var(--danger-color);
+}
+
+.text-warning {
+  color: var(--warning-color);
+}
+
+.text-info {
+  color: var(--info-color);
+}
+
+.text-muted {
+  color: var(--neutral-500);
+}
+
+/* === 文本截斷 === */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* === 超連結樣式 === */
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-normal) ease;
+}
+
+a:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.link-muted {
+  color: var(--neutral-600);
+}
+
+.link-muted:hover {
+  color: var(--neutral-800);
+}
+
+.link-no-underline:hover {
+  text-decoration: none;
+}
+
+/* === 文本強調 === */
+b, strong {
+  font-weight: var(--font-weight-bold);
+}
+
+em, i {
+  font-style: italic;
+}
+
+small {
+  font-size: var(--font-size-sm);
+}
+
+/* === 列表樣式 === */
+ul, ol {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-5);
+}
+
+ul li, ol li {
+  margin-bottom: var(--space-2);
+}
+
+.list-unstyled {
+  list-style: none;
+  padding-left: 0;
+}
+
+.list-inline {
+  list-style: none;
+  padding-left: 0;
+}
+
+.list-inline li {
+  display: inline-block;
+  margin-right: var(--space-3);
+}
+
+/* === 響應式文本 === */
+@media (max-width: 768px) {
+  h1, .h1 {
+    font-size: calc(var(--font-size-2xl) + 0.25rem);
+  }
+  
+  h2, .h2 {
+    font-size: var(--font-size-2xl);
+  }
+  
+  h3, .h3 {
+    font-size: var(--font-size-xl);
+  }
+}
