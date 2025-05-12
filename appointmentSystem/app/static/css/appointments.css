@@ -1,17 +1,20 @@
-/* ===== 預約列表表格 ===== */
+/* ===== 預約管理頁面樣式 ===== */
+@import 'variables.css';
+
+/* === 預約表格容器 === */
 .appointments-table {
     overflow-x: auto;
+    background-color: var(--card-background);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-6);
 }
 
-.table {
-    margin-bottom: 0;
-}
-
-/* 客戶資訊 */
+/* === 客戶資訊 === */
 .customer-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
 }
 
 .customer-info img {
@@ -19,75 +22,88 @@
     height: 35px;
     border-radius: 50%;
     object-fit: cover;
+    background-color: var(--neutral-200);
 }
 
 .customer-info .details {
-    line-height: 1.3;
+    line-height: var(--line-height-tight);
 }
 
 .customer-info .name {
-    font-weight: 500;
-    color: #333;
+    font-weight: var(--font-weight-medium);
+    color: var(--neutral-800);
 }
 
 .customer-info .phone {
-    font-size: 0.85rem;
-    color: #666;
+    font-size: var(--font-size-sm);
+    color: var(--neutral-600);
 }
 
-/* 預約狀態 */
+/* === 預約狀態 === */
+.status-badge {
+    display: inline-block;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-align: center;
+    min-width: 80px;
+}
+
 .status-badge.pending {
-    background: #fff3cd;
-    color: #856404;
+    background-color: var(--warning-light);
+    color: var(--warning-color);
 }
 
 .status-badge.confirmed {
-    background: #cce5ff;
-    color: #004085;
+    background-color: var(--info-light);
+    color: var(--info-color);
 }
 
 .status-badge.completed {
-    background: #d4edda;
-    color: #155724;
+    background-color: var(--success-light);
+    color: var(--success-color);
 }
 
 .status-badge.cancelled {
-    background: #f8d7da;
-    color: #721c24;
+    background-color: var(--danger-light);
+    color: var(--danger-color);
 }
 
-/* 預約詳情 */
+/* === 預約詳情 === */
 .appointment-details {
-    padding: 15px;
+    padding: var(--space-4);
 }
 
 .details-group {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
 }
 
 .details-group h6 {
-    color: #666;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
+    color: var(--neutral-600);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-2);
+    font-weight: var(--font-weight-semibold);
 }
 
 .details-group p {
     margin: 0;
-    color: #333;
-    font-weight: 500;
+    margin-bottom: var(--space-2);
+    color: var(--neutral-800);
+    font-weight: var(--font-weight-medium);
 }
 
-/* 響應式調整 */
+/* === 批量操作 === */
+.bulk-actions {
+    margin-bottom: var(--space-4);
+    padding: var(--space-3);
+    background-color: var(--neutral-100);
+    border-radius: var(--radius-md);
+    display: none;
+}
+
+/* === 響應式調整 === */
 @media (max-width: 768px) {
-    .table {
-        font-size: 0.9rem;
-    }
-
-    .status-badge {
-        min-width: 90px;
-        font-size: 0.8rem;
-    }
-
     .customer-info img {
         width: 30px;
         height: 30px;
