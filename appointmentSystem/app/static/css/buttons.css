@@ -1,0 +1,179 @@
+/* === 統一按鈕樣式 === */
+@import 'variables.css';
+
+/* === 按鈕基礎樣式 === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal) ease;
+}
+
+/* === 按鈕尺寸 === */
+.btn-sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-lg);
+}
+
+/* === 按鈕變體 === */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover, 
+.btn-primary:focus {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline:hover, 
+.btn-outline:focus {
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
+  box-shadow: 0 0 0 2px var(--primary-light);
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  color: white;
+  border-color: var(--success-color);
+}
+
+.btn-success:hover, 
+.btn-success:focus {
+  background-color: darkgreen;
+  border-color: darkgreen;
+  box-shadow: 0 0 0 2px var(--success-light);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: white;
+  border-color: var(--danger-color);
+}
+
+.btn-danger:hover, 
+.btn-danger:focus {
+  background-color: darkred;
+  border-color: darkred;
+  box-shadow: 0 0 0 2px var(--danger-light);
+}
+
+.btn-light {
+  background-color: var(--neutral-100);
+  color: var(--neutral-800);
+  border-color: var(--neutral-300);
+}
+
+.btn-light:hover, 
+.btn-light:focus {
+  background-color: var(--neutral-200);
+  color: var(--neutral-900);
+  box-shadow: 0 0 0 2px var(--neutral-300);
+}
+
+/* === 圖標按鈕 === */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-lg);
+}
+
+.btn-icon.btn-sm {
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--font-size-md);
+}
+
+.btn-icon.btn-lg {
+  width: 3rem;
+  height: 3rem;
+  font-size: var(--font-size-xl);
+}
+
+/* === 按鈕組 === */
+.btn-group {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.btn-group-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* === 操作按鈕 === */
+.action-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  border: none;
+  background: none;
+  color: var(--neutral-600);
+  transition: all var(--transition-normal) ease;
+}
+
+.action-btn:hover {
+  background: var(--neutral-100);
+  color: var(--neutral-800);
+}
+
+.action-btn.edit:hover {
+  color: var(--info-color);
+}
+
+.action-btn.delete:hover {
+  color: var(--danger-color);
+}
+
+.action-btn.view:hover {
+  color: var(--primary-color);
+}
+
+/* === 停用狀態 === */
+.btn:disabled,
+.btn.disabled {
+  opacity: 0.65;
+  pointer-events: none;
+  background-color: var(--neutral-200);
+  border-color: var(--neutral-300);
+  color: var(--neutral-600);
+}
