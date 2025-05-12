@@ -26,6 +26,10 @@
   --info-color: #17a2b8;            /* 信息 */
   --info-light: #d1ecf1;            /* 淺信息背景 */
   
+  /* 統一背景色 - 確保所有頁面使用相同背景色 */
+  --app-background: #f8f9fa;         /* 統一的應用背景色 */
+  --card-background: white;          /* 卡片/面板背景色 */
+  
   /* 字體 */
   --font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
   
@@ -78,4 +82,7 @@
   --transition-fast: 150ms;
   --transition-normal: 300ms;
   --transition-slow: 500ms;
+  
+  /* 分頁切換動畫 */
+  --page-transition: all 0.3s ease-in-out;
 }
