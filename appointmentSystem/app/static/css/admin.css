@@ -1,16 +1,5 @@
-/* ===== 全局樣式 ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Microsoft JhengHei', sans-serif;
-    background-color: #F8F9FA;
-    color: #333333;
-    line-height: 1.6;
-}
+/* ===== 管理後台特定樣式 ===== */
+@import 'variables.css';
 
 /* ===== 後台容器 ===== */
 .admin-container {
@@ -22,15 +11,15 @@ body {
 .sidebar {
     width: 260px;
     background: white;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-normal) ease;
     z-index: 1000;
 }
 
 .sidebar-header {
-    padding: 20px;
+    padding: var(--space-5);
     text-align: center;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--neutral-200);
 }
 
 .logo {
@@ -38,53 +27,53 @@ body {
     height: 80px;
     object-fit: cover;
     border-radius: 50%;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-2);
 }
 
 .sidebar-header h3 {
-    color: #DB7093;
-    font-size: 1.2rem;
+    color: var(--primary-color);
+    font-size: var(--font-size-lg);
     margin: 0;
 }
 
 .nav-links {
     list-style: none;
-    padding: 20px 0;
+    padding: var(--space-5) 0;
 }
 
 .nav-links li {
-    padding: 0 20px;
+    padding: 0 var(--space-5);
 }
 
 .nav-links a {
     display: flex;
     align-items: center;
-    padding: 12px 15px;
-    color: #666;
+    padding: var(--space-3) var(--space-4);
+    color: var(--neutral-600);
     text-decoration: none;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-normal) ease;
 }
 
 .nav-links a:hover {
-    background: #FFE4E1;
-    color: #DB7093;
+    background: var(--primary-light);
+    color: var(--primary-color);
 }
 
 .nav-links li.active a {
-    background: #DB7093;
+    background: var(--primary-color);
     color: white;
 }
 
 .nav-links i {
-    font-size: 1.2rem;
-    margin-right: 10px;
+    font-size: var(--font-size-lg);
+    margin-right: var(--space-2);
 }
 
 /* ===== 主要內容區 ===== */
 .main-content {
     flex: 1;
-    padding: 20px;
+    padding: var(--space-5);
     overflow-x: hidden;
 }
 
@@ -93,74 +82,26 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
+    padding: var(--space-4);
     background: white;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--space-5);
+    box-shadow: var(--shadow-sm);
 }
 
 .sidebar-toggle {
     border: none;
     background: none;
-    font-size: 1.5rem;
-    color: #666;
+    font-size: var(--font-size-xl);
+    color: var(--neutral-600);
     cursor: pointer;
     display: none;
-}
-
-.search-bar {
-    display: flex;
-    align-items: center;
-    background: #f5f5f5;
-    padding: 8px 15px;
-    border-radius: 8px;
-    flex: 0 1 300px;
-}
-
-.search-bar input {
-    border: none;
-    background: none;
-    outline: none;
-    padding: 5px;
-    width: 100%;
-}
-
-.search-bar i {
-    color: #666;
-}
-
-.top-bar-right {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.notifications {
-    position: relative;
-    cursor: pointer;
-}
-
-.notifications i {
-    font-size: 1.3rem;
-    color: #666;
-}
-
-.notifications .badge {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #DB7093;
-    color: white;
-    font-size: 0.7rem;
-    padding: 2px 5px;
-    border-radius: 10px;
 }
 
 .admin-profile {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-2);
     cursor: pointer;
 }
 
@@ -171,95 +112,20 @@ body {
     object-fit: cover;
 }
 
-/* ===== 儀表板內容 ===== */
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.card {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    display: flex;
-    align-items: center;
-    border: none;
-}
-
-.card-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-}
-
-.card-icon i {
-    font-size: 1.5rem;
-    color: #DB7093;
-}
-
-.card-info h3 {
-    font-size: 0.9rem;
-    color: #666;
-    margin: 0;
-}
-
-.card-info .number {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-.trend {
-    display: flex;
-    align-items: center;
-    font-size: 0.8rem;
-}
-
-.trend.positive {
-    color: #28a745;
-}
-
-.trend.negative {
-    color: #dc3545;
-}
-
-.trend.neutral {
-    color: #666;
-}
-
 /* ===== 儀表板網格 ===== */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.section-header h2 {
-    font-size: 1.2rem;
-    margin: 0;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
 }
 
 /* ===== 行事曆區域 ===== */
 .calendar-section {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 #calendar {
@@ -269,18 +135,19 @@ body {
 /* ===== 待辦事項 ===== */
 .tasks-section {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .task-list {
     list-style: none;
+    padding: 0;
 }
 
 .task-item {
-    padding: 12px 0;
-    border-bottom: 1px solid #eee;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--neutral-200);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -289,115 +156,60 @@ body {
 .task-content {
     display: flex;
     align-items: center;
-    gap: 10px;
-}
-
-.task-content input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+    gap: var(--space-2);
 }
 
 .task-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-2);
 }
 
 .priority {
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-xs);
 }
 
 .priority.high {
-    background: #FFE4E1;
-    color: #DB7093;
+    background: var(--primary-light);
+    color: var(--primary-color);
 }
 
 .priority.medium {
-    background: #E6E6FA;
-    color: #6A5ACD;
+    background: var(--info-light);
+    color: var(--info-color);
 }
 
 .priority.low {
-    background: #F0FFF0;
-    color: #228B22;
-}
-
-.due-time {
-    color: #666;
-    font-size: 0.8rem;
-}
-
-/* ===== 預約表格 ===== */
-.recent-bookings {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.table {
-    margin: 0;
-}
-
-.customer-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.customer-info img {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-.status {
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-}
-
-.status.pending {
-    background: #FFE4E1;
-    color: #DB7093;
-}
-
-.status.confirmed {
-    background: #F0FFF0;
-    color: #228B22;
-}
-
-.status.cancelled {
-    background: #FFE4E4;
-    color: #DC3545;
+    background: var(--success-light);
+    color: var(--success-color);
 }
 
 /* ===== 銷售分析 ===== */
 .sales-analytics {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .period-selector {
     display: flex;
-    gap: 10px;
+    gap: var(--space-2);
 }
 
 .period-selector button {
     border: none;
     background: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    color: #666;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-md);
+    color: var(--neutral-600);
     cursor: pointer;
 }
 
 .period-selector button.active {
-    background: #DB7093;
+    background: var(--primary-color);
     color: white;
 }
 
@@ -427,22 +239,14 @@ body {
         display: block;
     }
 
-    .summary-cards {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    }
-
-    .search-bar {
-        display: none;
+    .main-content {
+        padding: var(--space-3);
     }
 }
 
 @media (max-width: 480px) {
     .admin-profile span {
         display: none;
-    }
-
-    .card {
-        padding: 15px;
     }
 
     .task-meta {
