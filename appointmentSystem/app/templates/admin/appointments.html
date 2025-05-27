@@ -1,218 +1,193 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>預約管理 - 美甲預約系統</title>
+<div class="appointments-page page-container">
+  <!-- 頁面標題區 -->
+  <div class="page-header">
+    <h2>預約管理</h2>
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#appointmentModal"
+    >
+      <i class="fas fa-plus"></i> 新增預約
+    </button>
+  </div>
 
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Font Awesome -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <!-- 系統樣式 -->
-    <link
-      href="{{ url_for('static', filename='css/common.css') }}"
-      rel="stylesheet"
-    />
-    <link
-      href="{{ url_for('static', filename='css/appointments.css') }}"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div class="appointments-page">
-      <!-- 頁面標題區 -->
-      <div class="page-header">
-        <h2>預約管理</h2>
-        <button
-          type="button"
-          class="btn btn-primary"
-          data-bs-toggle="modal"
-          data-bs-target="#appointmentFormModal"
-        >
-          <i class="fas fa-plus"></i> 新增預約
-        </button>
-      </div>
-
-      <!-- 篩選工具列 -->
-      <div class="filter-toolbar">
-        <div class="filter-group">
-          <select class="form-select" id="statusFilter">
-            <option value="">所有狀態</option>
-            <option value="pending">待確認</option>
-            <option value="confirmed">已確認</option>
-            <option value="completed">已完成</option>
-            <option value="cancelled">已取消</option>
-          </select>
-          <input type="date" class="form-control" id="dateFilter" />
-          <select class="form-select" id="serviceFilter">
-            <option value="">所有服務</option>
-            <!-- 服務選項將由JavaScript動態填充 -->
-          </select>
-        </div>
-        <div class="search-group">
-          <div class="input-group">
-            <span class="input-group-text"><i class="fas fa-search"></i></span>
-            <input
-              type="text"
-              class="form-control"
-              placeholder="搜尋客戶名稱或電話..."
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- 預約列表 -->
-      <div class="appointments-table">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  id="selectAll"
-                />
-              </th>
-              <th>預約編號</th>
-              <th>客戶資訊</th>
-              <th>服務項目</th>
-              <th>預約時間</th>
-              <th>金額</th>
-              <th>狀態</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody id="appointmentsList">
-            <!-- 預約資料將由JavaScript動態填充 -->
-          </tbody>
-        </table>
-      </div>
-      <!-- 預約表單 Modal -->
-      <div class="modal fade" id="appointmentModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">新增預約</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <form id="appointmentForm">
-                <!-- 客戶資訊 -->
-                <div class="form-section">
-                  <h6>客戶資訊</h6>
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">姓名</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        name="customerName"
-                        required
-                      />
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">電話</label>
-                      <input
-                        type="tel"
-                        class="form-control"
-                        name="phone"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 預約資訊 -->
-                <div class="form-section">
-                  <h6>預約資訊</h6>
-                  <div class="row">
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">服務項目</label>
-                      <select class="form-select" name="serviceId" required>
-                        <option value="">請選擇服務</option>
-                      </select>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                      <label class="form-label">預約日期</label>
-                      <input
-                        type="date"
-                        class="form-control"
-                        name="appointmentDate"
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label">預約時間</label>
-                    <select class="form-select" name="appointmentTime" required>
-                      <option value="">請選擇時間</option>
-                    </select>
-                  </div>
-                </div>
-
-                <!-- 備註 -->
-                <div class="form-section">
-                  <h6>其他資訊</h6>
-                  <div class="mb-3">
-                    <label class="form-label">備註</label>
-                    <textarea
-                      class="form-control"
-                      name="notes"
-                      rows="3"
-                    ></textarea>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                取消
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                onclick="saveAppointment()"
-              >
-                儲存預約
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 分頁控制 -->
-      <div class="pagination-controls">
-        <div class="page-size">
-          每頁顯示：
-          <select class="form-select form-select-sm" id="pageSizeSelect">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-          </select>
-        </div>
-        <ul class="pagination" id="pagination">
-          <!-- 分頁按鈕將由JavaScript動態填充 -->
-        </ul>
+  <!-- 篩選工具列 -->
+  <div class="filter-toolbar">
+    <div class="filter-group">
+      <select class="form-select" id="statusFilter">
+        <option value="">所有狀態</option>
+        <option value="pending">待確認</option>
+        <option value="confirmed">已確認</option>
+        <option value="completed">已完成</option>
+        <option value="cancelled">已取消</option>
+      </select>
+      <input type="date" class="form-control" id="dateFilter" />
+      <select class="form-select" id="serviceFilter">
+        <option value="">所有服務</option>
+        <!-- 服務選項將由JavaScript動態填充 -->
+      </select>
+    </div>
+    <div class="search-group">
+      <div class="input-group">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
+        <input
+          type="text"
+          class="form-control"
+          id="searchInput"
+          placeholder="搜尋客戶名稱或電話..."
+        />
       </div>
     </div>
+  </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- 系統功能 -->
-    <script src="{{ url_for('static', filename='/js/appointments.js') }}"></script>
-  </body>
-</html>
+  <!-- 批量操作 -->
+  <div class="bulk-actions" style="display: none;">
+    <button class="btn btn-danger btn-sm" onclick="bulkDelete()">
+      <i class="fas fa-trash"></i> 批量刪除
+    </button>
+  </div>
+
+  <!-- 預約列表 -->
+  <div class="appointments-table">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="selectAll"
+            />
+          </th>
+          <th>預約編號</th>
+          <th>客戶資訊</th>
+          <th>服務項目</th>
+          <th>預約時間</th>
+          <th>金額</th>
+          <th>狀態</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="appointmentsList">
+        <!-- 預約資料將由JavaScript動態填充 -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 分頁控制 -->
+  <div class="pagination-controls">
+    <div class="page-size">
+      每頁顯示：
+      <select class="form-select form-select-sm" id="pageSizeSelect">
+        <option value="10">10</option>
+        <option value="20">20</option>
+        <option value="50">50</option>
+      </select>
+    </div>
+    <ul class="pagination" id="pagination">
+      <!-- 分頁按鈕將由JavaScript動態填充 -->
+    </ul>
+  </div>
+
+  <!-- 預約表單 Modal -->
+  <div class="modal fade" id="appointmentModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">新增預約</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form id="appointmentForm">
+            <!-- 客戶資訊 -->
+            <div class="form-section">
+              <h6>客戶資訊</h6>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">姓名</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="customerName"
+                    required
+                  />
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">電話</label>
+                  <input
+                    type="tel"
+                    class="form-control"
+                    name="phone"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+
+            <!-- 預約資訊 -->
+            <div class="form-section">
+              <h6>預約資訊</h6>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">服務項目</label>
+                  <select class="form-select" name="serviceId" required>
+                    <option value="">請選擇服務</option>
+                  </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">預約日期</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    name="appointmentDate"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">預約時間</label>
+                <select class="form-select" name="appointmentTime" required>
+                  <option value="">請選擇時間</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- 備註 -->
+            <div class="form-section">
+              <h6>其他資訊</h6>
+              <div class="mb-3">
+                <label class="form-label">備註</label>
+                <textarea
+                  class="form-control"
+                  name="notes"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            取消
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="saveAppointment()"
+          >
+            儲存預約
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

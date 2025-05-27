@@ -12,8 +12,10 @@
     width: 260px;
     background: white;
     box-shadow: var(--shadow-sm);
-    transition: all var(--transition-normal) ease;
+    transition: transform var(--transition-normal) ease;
     z-index: 1000;
+    position: relative;
+    will-change: transform;
 }
 
 .sidebar-header {
@@ -63,7 +65,12 @@
 .nav-links li.active a {
     background: var(--primary-color);
     color: white;
+    font-weight: 600;
+    position: relative;
 }
+
+/* 移除左側邊框指示 */
+/* .nav-links li.active::before 樣式已刪除 */
 
 .nav-links i {
     font-size: var(--font-size-lg);
@@ -75,6 +82,82 @@
     flex: 1;
     padding: var(--space-5);
     overflow-x: hidden;
+    position: relative;
+    min-height: 500px;
+}
+
+/* ===== 頁面載入動畫 ===== */
+.page-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: opacity 0.3s ease;
+}
+
+.page-loader .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--neutral-200);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.page-loader span {
+    color: var(--neutral-600);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ===== 頁面過渡效果 ===== */
+.page-container {
+    animation: fadeInContent 0.4s ease-in-out;
+}
+
+.page-container.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.page-container.entering {
+    animation: slideInContent 0.4s ease-out;
+}
+
+@keyframes fadeInContent {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInContent {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* ===== 頂部導航 ===== */
@@ -227,20 +310,54 @@
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;
-        left: -260px;
+        left: 0;
         height: 100vh;
+        transform: translateX(-100%);
+        transition: transform var(--transition-normal) ease;
     }
 
     .sidebar.active {
-        left: 0;
+        transform: translateX(0);
     }
 
     .sidebar-toggle {
         display: block;
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+        background: white;
+        padding: var(--space-2);
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-sm);
     }
 
     .main-content {
         padding: var(--space-3);
+        padding-top: 70px;
+    }
+
+    .page-loader {
+        padding: 20px;
+    }
+    
+    /* 手機版過幕層 */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-normal) ease;
+    }
+    
+    .sidebar-overlay.active {
+        opacity: 1;
+        visibility: visible;
     }
 }
 

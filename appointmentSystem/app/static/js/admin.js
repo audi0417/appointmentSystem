@@ -1,30 +1,5 @@
-// ===== 初始化設定 =====
-// CSRF 設置
-document.addEventListener('DOMContentLoaded', function() {
-  // 獲取 CSRF token
-  const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-  
-  if (token) {
-      // 設置 axios 預設 header
-      if (window.axios) {
-          axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
-      }
-      
-      // 設置 jQuery ajax 預設 header
-      $.ajaxSetup({
-          beforeSend: function(xhr, settings) {
-              if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
-                  xhr.setRequestHeader("X-CSRFToken", token);
-              }
-          }
-      });
-  }
-  
-  // 初始化其他功能
-  initSidebar();
-  initEventListeners();
-  registerRoutes();
-});
+// ===== 全域變數 =====
+let router;
 
 // ===== 路由管理 =====
 class Router {
@@ -43,32 +18,35 @@ class Router {
     }
 
     async handleRoute() {
+        // 防止重複觸發
         if (this.isTransitioning) return;
         this.isTransitioning = true;
 
         try {
+            // 獲取當前路徑
+            const hash = window.location.hash.slice(1) || "dashboard";
+            
+            // 如果是相同頁面，不需要重新載入
+            if (this.currentPage === hash) {
+                this.isTransitioning = false;
+                return;
+            }
+            
+            this.currentPage = hash;
+            
             // 執行清理函數
             if (this.currentCleanup) {
                 this.currentCleanup();
                 this.currentCleanup = null;
             }
-
-            // 獲取當前路徑並顯示載入中提示
-            const hash = window.location.hash.slice(1) || "dashboard";
-            this.currentPage = hash;
             
-            // 更新導航
+            // 更新導航狀態
             this.updateNavigation();
+            
+            // 顯示載入動畫
+            this.showLoading();
 
             const mainContent = document.querySelector(".main-content");
-            
-            // 添加淡出效果
-            mainContent.classList.add('page-container', 'loading');
-            
-            // 等待淡出動畫完成
-            await new Promise(resolve => setTimeout(resolve, 300));
-            
-            this.showLoading();
 
             if (this.routes[hash]) {
                 try {
@@ -80,29 +58,18 @@ class Router {
                     // 初始化頁面特定功能
                     await this.initializePageFeatures(hash);
                     
-                    // 添加進入動畫
-                    const pageContainer = document.querySelector('.page-container');
-                    if (pageContainer) {
-                        pageContainer.classList.remove('loading');
-                        pageContainer.classList.add('entering');
-                        
-                        // 移除進入動畫類，以便下次切換
-                        setTimeout(() => {
-                            pageContainer.classList.remove('entering');
-                        }, 500);
-                    }
-                    
                 } catch (error) {
                     console.error("頁面載入失敗:", error);
                     mainContent.innerHTML = '<div class="error-message">頁面載入失敗</div>';
                 }
             } else {
-                showError(`找不到頁面: ${hash}`);
+                mainContent.innerHTML = `<div class="error-message">找不到頁面: ${hash}</div>`;
             }
 
         } catch (error) {
             console.error("路由處理失敗:", error);
-            showError("頁面載入失敗");
+            const mainContent = document.querySelector(".main-content");
+            mainContent.innerHTML = '<div class="error-message">頁面載入失敗</div>';
         } finally {
             this.hideLoading();
             this.isTransitioning = false;
@@ -110,33 +77,39 @@ class Router {
     }
 
     async initializePageFeatures(page) {
-        switch(page) {
-            case 'dashboard':
-                if (typeof initializeDashboard === 'function') await initializeDashboard();
-                break;
-            case 'appointments':
-                if (typeof initializeAppointments === 'function') await initializeAppointments();
-                break;
-            case 'members':
-                if (typeof initializeMembers === 'function') await initializeMembers();
-                break;
-            case 'portfolio':
-                if (typeof initializePortfolio === 'function') await initializePortfolio();
-                break;
-            case 'services':
-                if (typeof initializeServices === 'function') await initializeServices();
-                break;
-        }
+        // 延遲執行以確保DOM完全載入
+        setTimeout(async () => {
+            switch(page) {
+                case 'dashboard':
+                    if (typeof initializeDashboard === 'function') await initializeDashboard();
+                    break;
+                case 'appointments':
+                    if (typeof initializeAppointments === 'function') await initializeAppointments();
+                    break;
+                case 'members':
+                    if (typeof initializeMembers === 'function') await initializeMembers();
+                    break;
+                case 'portfolio':
+                    if (typeof initializePortfolio === 'function') await initializePortfolio();
+                    break;
+                case 'services':
+                    if (typeof initializeServices === 'function') await initializeServices();
+                    break;
+            }
+        }, 100);
     }
 
     updateNavigation() {
+        // 只更新導航狀態，不重新渲染側邊欄
+        document.querySelectorAll(".nav-links li").forEach((listItem) => {
+            listItem.classList.remove("active");
+        });
+        
         document.querySelectorAll(".nav-links a").forEach((link) => {
             const page = link.getAttribute("href").substring(1) || "dashboard";
             const listItem = link.parentElement;
             if (page === this.currentPage) {
                 listItem.classList.add("active");
-            } else {
-                listItem.classList.remove("active");
             }
         });
     }
@@ -147,17 +120,21 @@ class Router {
     }
 
     showLoading() {
-        const existingLoader = document.querySelector('.loader');
+        const mainContent = document.querySelector(".main-content");
+        const existingLoader = mainContent.querySelector('.page-loader');
         if (existingLoader) return;
         
         const loader = document.createElement('div');
-        loader.className = 'loader';
+        loader.className = 'page-loader';
         loader.innerHTML = '<div class="spinner"></div><span>載入中...</span>';
-        document.body.appendChild(loader);
+        
+        // 只在主內容區顯示加載動畫
+        mainContent.style.position = 'relative';
+        mainContent.appendChild(loader);
     }
 
     hideLoading() {
-        const loader = document.querySelector('.loader');
+        const loader = document.querySelector('.page-loader');
         if (loader) {
             // 淡出效果
             loader.style.opacity = '0';
@@ -170,26 +147,51 @@ class Router {
 function initSidebar() {
     const sidebarToggle = document.getElementById("sidebar-toggle");
     const sidebar = document.querySelector(".sidebar");
+    
+    // 創建手機版遮罩層
+    let overlay = document.querySelector('.sidebar-overlay');
+    if (!overlay && window.innerWidth <= 768) {
+        overlay = document.createElement('div');
+        overlay.className = 'sidebar-overlay';
+        document.body.appendChild(overlay);
+    }
 
     sidebarToggle?.addEventListener("click", () => {
-        sidebar?.classList.toggle("active");
+        const isActive = sidebar?.classList.toggle("active");
+        if (overlay) {
+            overlay.classList.toggle("active", isActive);
+        }
     });
 
+    // 點擊遮罩層或側邊欄外部關閉側邊欄
     document.addEventListener("click", (e) => {
         if (
             sidebar &&
+            sidebar.classList.contains("active") &&
             !sidebar.contains(e.target) &&
             sidebarToggle &&
             !sidebarToggle.contains(e.target) &&
             window.innerWidth <= 768
         ) {
             sidebar.classList.remove("active");
+            if (overlay) {
+                overlay.classList.remove("active");
+            }
         }
+    });
+
+    // 遮罩層點擊事件
+    overlay?.addEventListener("click", () => {
+        sidebar?.classList.remove("active");
+        overlay.classList.remove("active");
     });
 
     window.addEventListener("resize", () => {
         if (window.innerWidth > 768) {
             sidebar?.classList.remove("active");
+            if (overlay) {
+                overlay.classList.remove("active");
+            }
         }
     });
 }
@@ -200,223 +202,169 @@ function initEventListeners() {
         link.addEventListener("click", (e) => {
             e.preventDefault();
             const page = link.getAttribute("href").substring(1);
-            router.navigateTo(page);
+            if (router) {
+                router.navigateTo(page);
+            }
         });
     });
 }
-  
+
+// ===== 註冊路由 =====
+function registerRoutes() {
+    if (!router) return;
+    
+    // Dashboard 路由
+    router.addRoute("dashboard", async () => {
+        const mainContent = document.querySelector(".main-content");
+        try {
+            const response = await fetch("/admin/dashboard");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const html = await response.text();
+            mainContent.innerHTML = html;
+        } catch (error) {
+            console.error("載入儀表板失敗:", error);
+            mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
+        }
+    });
+
+    // 預約管理路由
+    router.addRoute("appointments", async () => {
+        const mainContent = document.querySelector(".main-content");
+        try {
+            const response = await fetch("/admin/appointments");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const html = await response.text();
+            mainContent.innerHTML = html;
+        } catch (error) {
+            console.error("載入預約管理失敗:", error);
+            mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
+        }
+    });
+
+    // 會員管理路由
+    router.addRoute("members", async () => {
+        const mainContent = document.querySelector(".main-content");
+        try {
+            const response = await fetch("/admin/members");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const html = await response.text();
+            mainContent.innerHTML = html;
+        } catch (error) {
+            console.error("載入會員管理失敗:", error);
+            mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
+        }
+    });
+
+    // 服務項目路由
+    router.addRoute("services", async () => {
+        const mainContent = document.querySelector(".main-content");
+        try {
+            const response = await fetch("/admin/services");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const html = await response.text();
+            mainContent.innerHTML = html;
+        } catch (error) {
+            console.error("載入服務項目失敗:", error);
+            mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
+        }
+    });
+
+    // 作品集路由
+    router.addRoute("portfolio", async () => {
+        const mainContent = document.querySelector(".main-content");
+        try {
+            const response = await fetch("/admin/portfolio");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const html = await response.text();
+            mainContent.innerHTML = html;
+        } catch (error) {
+            console.error("載入作品集失敗:", error);
+            mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
+        }
+    });
+}
+
 // ===== 工具函數 =====
-// 日期格式化
 function formatDate(date) {
-  return new Date(date).toLocaleDateString("zh-TW", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+    return new Date(date).toLocaleDateString("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    });
 }
 
-// 金額格式化
 function formatCurrency(amount) {
-  return new Intl.NumberFormat("zh-TW", {
-    style: "currency",
-    currency: "TWD",
-  }).format(amount);
-}
-
-// ===== 通知處理 =====
-function showNotification(message, type = "info") {
-  const notificationDiv = document.createElement("div");
-  notificationDiv.className = `notification ${type}`;
-  notificationDiv.textContent = message;
-  
-  document.body.appendChild(notificationDiv);
-  
-  setTimeout(() => {
-    notificationDiv.remove();
-  }, 3000);
-}
-
-// ===== 錯誤處理 =====
-function showError(message) {
-  const errorDiv = document.createElement("div");
-  errorDiv.className = "alert alert-danger";
-  errorDiv.role = "alert";
-  errorDiv.textContent = message;
-  
-  const mainContent = document.querySelector(".main-content");
-  mainContent.prepend(errorDiv);
-
-  setTimeout(() => {
-    errorDiv.remove();
-  }, 5000);
+    return new Intl.NumberFormat("zh-TW", {
+        style: "currency",
+        currency: "TWD",
+    }).format(amount);
 }
 
 // ===== API 請求封裝 =====
 const API = {
-  async get(endpoint) {
-    try {
-      const response = await fetch(endpoint);
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      return await response.json();
-    } catch (error) {
-      console.error("API 請求失敗:", error);
-      throw error;
-    }
-  },
+    async get(endpoint) {
+        try {
+            const response = await fetch(endpoint);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error("API 請求失敗:", error);
+            throw error;
+        }
+    },
 
-  async post(endpoint, data) {
-    try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      return await response.json();
-    } catch (error) {
-      console.error("API 請求失敗:", error);
-      throw error;
+    async post(endpoint, data) {
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            console.error("API 請求失敗:", error);
+            throw error;
+        }
     }
-  }
 };
 
-// ===== 註冊路由 =====
-function registerRoutes() {
-  // Dashboard 路由
-  router.addRoute("dashboard", async () => {
-      const mainContent = document.querySelector(".main-content");
-      try {
-          const response = await fetch("/admin/dashboard");
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const html = await response.text();
-          mainContent.innerHTML = html;
-          
-          // 確保頁面容器類名
-          const pageElement = mainContent.querySelector('.dashboard-content');
-          if (pageElement) {
-              pageElement.classList.add('page-container');
-          }
-          
-          // 初始化儀表板功能
-          if (typeof initializeDashboard === 'function') {
-              await initializeDashboard();
-          }
-      } catch (error) {
-          console.error("載入儀表板失敗:", error);
-          mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
-      }
-  });
-
-  // 預約管理路由
-  router.addRoute("appointments", async () => {
-      const mainContent = document.querySelector(".main-content");
-      try {
-          const response = await fetch("/admin/appointments");
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const html = await response.text();
-          mainContent.innerHTML = html;
-          
-          // 確保頁面容器類名
-          const pageElement = mainContent.querySelector('.appointments-page');
-          if (pageElement) {
-              pageElement.classList.add('page-container');
-          }
-          
-          // 初始化預約管理功能
-          if (typeof initializeAppointments === 'function') {
-              await initializeAppointments();
-          }
-      } catch (error) {
-          console.error("載入預約管理失敗:", error);
-          mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
-      }
-  });
-
-  // 會員管理路由
-  router.addRoute("members", async () => {
-      const mainContent = document.querySelector(".main-content");
-      try {
-          const response = await fetch("/admin/members");
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const html = await response.text();
-          mainContent.innerHTML = html;
-          
-          // 確保頁面容器類名
-          const pageElement = mainContent.querySelector('.members-page');
-          if (pageElement) {
-              pageElement.classList.add('page-container');
-          }
-          
-          // 初始化會員管理功能
-          if (typeof initializeMembers === 'function') {
-              await initializeMembers();
-          }
-      } catch (error) {
-          console.error("載入會員管理失敗:", error);
-          mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
-      }
-  });
-
-  // 服務項目路由
-  router.addRoute("services", async () => {
-      const mainContent = document.querySelector(".main-content");
-      try {
-          const response = await fetch("/admin/services");
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const html = await response.text();
-          mainContent.innerHTML = html;
-          
-          // 確保頁面容器類名
-          const pageElement = mainContent.querySelector('.services-page');
-          if (pageElement) {
-              pageElement.classList.add('page-container');
-          }
-          
-          // 初始化服務項目功能
-          if (typeof initializeServices === 'function') {
-              await initializeServices();
-          }
-      } catch (error) {
-          console.error("載入服務項目失敗:", error);
-          mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
-      }
-  });
-
-  // 作品集路由
-  router.addRoute("portfolio", async () => {
-      const mainContent = document.querySelector(".main-content");
-      try {
-          const response = await fetch("/admin/portfolio");
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-          const html = await response.text();
-          mainContent.innerHTML = html;
-          
-          // 確保頁面容器類名
-          const pageElement = mainContent.querySelector('.portfolio-page');
-          if (pageElement) {
-              pageElement.classList.add('page-container');
-          }
-          
-          // 初始化作品集功能
-          if (typeof initializePortfolio === 'function') {
-              await initializePortfolio();
-          }
-      } catch (error) {
-          console.error("載入作品集失敗:", error);
-          mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
-      }
-  });
-}
-
-// ===== 實例化路由 =====
-const router = new Router();
-
-// ===== 檢查初始路由 =====
-window.addEventListener("load", () => {
+// ===== 初始化 =====
+document.addEventListener('DOMContentLoaded', function() {
+    // 獲取 CSRF token
+    const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+    
+    if (token) {
+        // 設置 axios 預設 header
+        if (window.axios) {
+            axios.defaults.headers.common['X-CSRF-TOKEN'] = token;
+        }
+        
+        // 設置 jQuery ajax 預設 header
+        if (window.$) {
+            $.ajaxSetup({
+                beforeSend: function(xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", token);
+                    }
+                }
+            });
+        }
+    }
+    
+    // 初始化路由器
+    router = new Router();
+    
+    // 初始化其他功能
+    initSidebar();
+    initEventListeners();
+    registerRoutes();
+    
+    // 設置初始路由
     if (!window.location.hash) {
         window.location.hash = "#dashboard";
     }

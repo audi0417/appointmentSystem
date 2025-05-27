@@ -1,0 +1,18 @@
+<!-- 美甲設計示例圖片的佔位符 -->
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#F8F9FA"/>
+  <rect x="50" y="50" width="300" height="200" rx="12" fill="#E6E6FA"/>
+  <text x="200" y="130" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#6A5ACD">凝膠美甲設計</text>
+  <text x="200" y="160" text-anchor="middle" font-family="Arial" font-size="14" fill="#666">專業凝膠・手繪設計</text>
+  <text x="200" y="180" text-anchor="middle" font-family="Arial" font-size="14" fill="#666">持久不脫落・多樣款式</text>
+  
+  <!-- 裝飾性圖案 -->
+  <path d="M150 200 Q160 190 170 200 Q160 210 150 200" fill="#6A5ACD" opacity="0.7"/>
+  <path d="M190 205 Q200 195 210 205 Q200 215 190 205" fill="#9370DB" opacity="0.7"/>
+  <path d="M230 200 Q240 190 250 200 Q240 210 230 200" fill="#8A2BE2" opacity="0.7"/>
+  
+  <!-- 點綴 -->
+  <circle cx="165" cy="225" r="3" fill="#FFD700"/>
+  <circle cx="205" cy="225" r="3" fill="#FFD700"/>
+  <circle cx="235" cy="225" r="3" fill="#FFD700"/>
+</svg>

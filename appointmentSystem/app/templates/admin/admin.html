@@ -5,14 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>美甲預約系統後台管理</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Boxicons -->
     <link href="https://cdn.jsdelivr.net/npm/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
-    <!-- 使用新的統一CSS系統 -->
-    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    
+    <!-- 系統CSS -->
+    <link href="{{ url_for('static', filename='css/variables.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/admin.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/common.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/appointments.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/members.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/services.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/portfolio.css') }}" rel="stylesheet">
 </head>
 <body>
+    <!-- 手機版側邊欄切換按鈕 -->
+    <button class="sidebar-toggle" id="sidebar-toggle">
+        <i class='bx bx-menu'></i>
+    </button>
+    
     <div class="admin-container">
         <!-- 側邊導航 -->
         <nav class="sidebar">
@@ -71,6 +89,15 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="{{ url_for('static', filename='/js/admin.js') }}"></script>
+    
+    <!-- 系統功能 JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/appointments.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/members.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/services.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/portfolio.js') }}"></script>
+    
+    <!-- 主要管理系統 -->
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
 </body>
 </html>
