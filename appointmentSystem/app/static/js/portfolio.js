@@ -1,10 +1,6 @@
-// 作品集頁面功能
-document.addEventListener('DOMContentLoaded', function() {
-    initializePortfolio();
-});
-
-// 初始化作品集功能
+// 全局初始化函數
 function initializePortfolio() {
+    console.log('初始化作品集頁面');
     initializeImageUpload();
     initializeFormValidation();
     initializeFilters();
@@ -243,5 +239,11 @@ function closeModal(modalId) {
 // 重置表單
 function resetForm(form) {
     form.reset();
-    document.querySelector('.image-preview-container').innerHTML = '';
+    const previewContainer = document.querySelector('.image-preview-container');
+    if (previewContainer) {
+        previewContainer.innerHTML = '';
+    }
 }
+
+// 導出全局函數
+window.initializePortfolio = initializePortfolio;

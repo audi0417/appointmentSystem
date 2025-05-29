@@ -1,0 +1,36 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="300" fill="#f8f9fa"/>
+  
+  <!-- Store Icon -->
+  <g transform="translate(75, 75)">
+    <!-- Building -->
+    <rect x="0" y="40" width="150" height="110" fill="#DB7093" rx="4"/>
+    
+    <!-- Roof -->
+    <polygon points="0,40 75,10 150,40" fill="#c76086"/>
+    
+    <!-- Door -->
+    <rect x="60" y="100" width="30" height="50" fill="#a0527a" rx="2"/>
+    <circle cx="82" cy="125" r="2" fill="#f8f9fa"/>
+    
+    <!-- Windows -->
+    <rect x="20" y="70" width="25" height="20" fill="#f8f9fa" rx="2"/>
+    <rect x="105" y="70" width="25" height="20" fill="#f8f9fa" rx="2"/>
+    
+    <!-- Window frames -->
+    <line x1="32.5" y1="70" x2="32.5" y2="90" stroke="#DB7093" stroke-width="1"/>
+    <line x1="20" y1="80" x2="45" y2="80" stroke="#DB7093" stroke-width="1"/>
+    <line x1="117.5" y1="70" x2="117.5" y2="90" stroke="#DB7093" stroke-width="1"/>
+    <line x1="105" y1="80" x2="130" y2="80" stroke="#DB7093" stroke-width="1"/>
+    
+    <!-- Sign -->
+    <rect x="40" y="20" width="70" height="25" fill="#f8f9fa" rx="2" stroke="#DB7093" stroke-width="2"/>
+    <text x="75" y="37" text-anchor="middle" fill="#DB7093" font-family="Arial, sans-serif" font-size="10" font-weight="bold">STORE</text>
+  </g>
+  
+  <!-- Decorative elements -->
+  <circle cx="50" cy="250" r="15" fill="#DB7093" opacity="0.3"/>
+  <circle cx="250" cy="50" r="12" fill="#DB7093" opacity="0.2"/>
+  <circle cx="220" cy="280" r="18" fill="#DB7093" opacity="0.25"/>
+</svg>

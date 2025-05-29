@@ -84,20 +84,22 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTitle">新增會員</h5>
-                    <button type="button" class="btn-close close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form id="memberForm">
+                        <input type="hidden" name="id">
+                        
                         <!-- 基本資料 -->
                         <div class="form-section">
                             <h6>基本資料</h6>
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">姓名</label>
+                                    <label class="form-label">姓名 *</label>
                                     <input type="text" class="form-control" name="name" required>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label class="form-label">電話</label>
+                                    <label class="form-label">電話 *</label>
                                     <input type="tel" class="form-control" name="phone" required>
                                 </div>
                             </div>
@@ -119,14 +121,14 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">會員等級</label>
-                                    <select class="form-select" name="level" required>
+                                    <select class="form-select" name="level">
                                         <option value="normal">一般會員</option>
                                         <option value="vip">VIP會員</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">狀態</label>
-                                    <select class="form-select" name="status" required>
+                                    <select class="form-select" name="status">
                                         <option value="active">正常</option>
                                         <option value="inactive">停用</option>
                                     </select>
@@ -145,8 +147,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="cancelBtn">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="saveMember()">儲存</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn" data-bs-dismiss="modal">取消</button>
+                    <button type="submit" form="memberForm" class="btn btn-primary">儲存</button>
                 </div>
             </div>
         </div>

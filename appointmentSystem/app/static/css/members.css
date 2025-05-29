@@ -1,136 +1,63 @@
-/* ===== 會員管理頁面樣式 ===== */
-@import 'variables.css';
+/* 會員管理頁面的特殊樣式 */
 
-/* === 會員表格容器 === */
-.members-table {
-    overflow-x: auto;
-    background-color: var(--card-background);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--space-6);
+/* 更新高亮效果 */
+.updated-highlight {
+    background-color: #d4edda !important;
+    transition: background-color 0.3s ease;
 }
 
-/* === 會員資料卡片 === */
-.member-info {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
+/* 分頁按鈕樣式 */
+.page-btn {
+    padding: 8px 12px;
+    margin: 0 2px;
+    border: 1px solid #dee2e6;
+    background: white;
+    color: #6c757d;
+    cursor: pointer;
+    border-radius: 4px;
+    text-decoration: none;
 }
 
-.member-avatar img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: var(--neutral-200);
+.page-btn:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
 }
 
-.member-details {
-    line-height: var(--line-height-tight);
+.page-btn.active {
+    background-color: #DB7093;
+    border-color: #DB7093;
+    color: white;
 }
 
-.member-name {
-    font-weight: var(--font-weight-medium);
-    color: var(--neutral-800);
-    margin-bottom: var(--space-1);
-}
-
-.member-id {
-    font-size: var(--font-size-sm);
-    color: var(--neutral-600);
-}
-
-/* === 聯絡方式 === */
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.contact-info > div {
-    line-height: var(--line-height-tight);
-}
-
-/* === 會員等級 === */
-.member-level {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-    text-align: center;
-    min-width: 80px;
-}
-
-.member-level.normal {
-    background-color: var(--neutral-200);
-    color: var(--neutral-700);
-}
-
-.member-level.vip {
-    background-color: #fdf6b2; /* 特殊黃金色 */
-    color: #975a16; /* 深褐色 */
-}
-
-/* === 消費統計 === */
-.consumption-stats {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.stats-item {
+/* 分頁控制區域 */
+.pagination-controls {
     display: flex;
     justify-content: space-between;
-    font-size: var(--font-size-sm);
+    align-items: center;
+    margin-top: 20px;
+    padding: 15px 0;
 }
 
-.stats-label {
-    color: var(--neutral-600);
-    margin-right: var(--space-2);
+.page-size {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.stats-value {
-    color: var(--neutral-800);
-    font-weight: var(--font-weight-medium);
+#membersPagination {
+    display: flex;
+    align-items: center;
 }
 
-/* === 批量操作 === */
-.bulk-actions {
-    margin-bottom: var(--space-4);
-    padding: var(--space-3);
-    background-color: var(--neutral-100);
-    border-radius: var(--radius-md);
-    display: none;
-}
-
-/* === 響應式調整 === */
+/* 響應式調整 */
 @media (max-width: 768px) {
-    .member-info {
+    .pagination-controls {
         flex-direction: column;
-        align-items: flex-start;
-        gap: var(--space-2);
+        gap: 15px;
     }
     
-    .member-avatar img {
-        width: 36px;
-        height: 36px;
-    }
-}
-
-@media (max-width: 576px) {
-    .table th:nth-child(4),
-    .table td:nth-child(4),
-    .table th:nth-child(5),
-    .table td:nth-child(5),
-    .table th:nth-child(6),
-    .table td:nth-child(6) {
-        display: none;
-    }
-
-    .member-id {
-        display: none;
+    .page-btn {
+        padding: 6px 10px;
+        font-size: 0.9rem;
     }
 }

@@ -1,0 +1,531 @@
+<div class="settings-page page-container">
+    <!-- 頁面標題區 -->
+    <div class="page-header">
+        <h2>系統設定</h2>
+        <div class="header-actions">
+            <button type="button" class="btn btn-success" id="saveAllBtn">
+                <i class="fas fa-save"></i> 儲存所有設定
+            </button>
+        </div>
+    </div>
+
+    <!-- 設定分頁標籤 -->
+    <div class="settings-tabs">
+        <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button">
+                    <i class="fas fa-store"></i> 商家基本資料
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="api-tab" data-bs-toggle="tab" data-bs-target="#api" type="button">
+                    <i class="fas fa-plug"></i> API 設定
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="social-tab" data-bs-toggle="tab" data-bs-target="#social" type="button">
+                    <i class="fas fa-share-alt"></i> 社群媒體
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="notification-tab" data-bs-toggle="tab" data-bs-target="#notification" type="button">
+                    <i class="fas fa-bell"></i> 通知設定
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 設定內容區 -->
+    <div class="tab-content" id="settingsTabContent">
+        <!-- 商家基本資料 -->
+        <div class="tab-pane fade show active" id="basic" role="tabpanel">
+            <div class="content-card">
+                <h4 class="section-title">
+                    <i class="fas fa-store"></i> 商家基本資料
+                </h4>
+                
+                <form id="basicInfoForm">
+                    <!-- 商家大頭貼 -->
+                    <div class="form-section">
+                        <h6>商家大頭貼</h6>
+                        <div class="avatar-upload-container">
+                            <div class="current-avatar">
+                                <img id="storeAvatar" src="/static/images/default-store.png" alt="商家大頭貼">
+                                <div class="avatar-overlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>更換照片</span>
+                                </div>
+                            </div>
+                            <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                            <div class="avatar-actions">
+                                <button type="button" class="btn btn-outline-primary" id="uploadAvatarBtn">
+                                    <i class="fas fa-upload"></i> 上傳新照片
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" id="removeAvatarBtn">
+                                    <i class="fas fa-trash"></i> 移除照片
+                                </button>
+                            </div>
+                            <small class="form-text text-muted">
+                                建議尺寸：300x300 像素，檔案大小不超過 2MB
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- 基本資料 -->
+                    <div class="form-section">
+                        <h6>基本資料</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">商家名稱 *</label>
+                                <input type="text" class="form-control" name="storeName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">商家英文名稱</label>
+                                <input type="text" class="form-control" name="storeNameEn">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">聯絡電話</label>
+                                <input type="tel" class="form-control" name="phone">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">電子郵件</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">商家地址</label>
+                            <input type="text" class="form-control" name="address">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">商家簡介</label>
+                            <textarea class="form-control" name="description" rows="4" placeholder="請輸入商家簡介..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- 營業時間 -->
+                    <div class="form-section">
+                        <h6>營業時間</h6>
+                        <div class="business-hours">
+                            <div class="day-schedule" data-day="monday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox" checked>
+                                        星期一
+                                    </label>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="monday_open" value="10:00">
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="monday_close" value="18:00">
+                                </div>
+                            </div>
+                            <div class="day-schedule" data-day="tuesday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox" checked>
+                                        星期二
+                                    </label>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="tuesday_open" value="10:00">
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="tuesday_close" value="18:00">
+                                </div>
+                            </div>
+                            <div class="day-schedule" data-day="wednesday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox" checked>
+                                        星期三
+                                    </label>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="wednesday_open" value="10:00">
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="wednesday_close" value="18:00">
+                                </div>
+                            </div>
+                            <div class="day-schedule" data-day="thursday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox" checked>
+                                        星期四
+                                    </label>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="thursday_open" value="10:00">
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="thursday_close" value="18:00">
+                                </div>
+                            </div>
+                            <div class="day-schedule" data-day="friday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox" checked>
+                                        星期五
+                                    </label>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="friday_open" value="10:00">
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="friday_close" value="18:00">
+                                </div>
+                            </div>
+                            <div class="day-schedule" data-day="saturday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox" checked>
+                                        星期六
+                                    </label>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="saturday_open" value="10:00">
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="saturday_close" value="18:00">
+                                </div>
+                            </div>
+                            <div class="day-schedule" data-day="sunday">
+                                <div class="day-header">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input day-toggle" type="checkbox">
+                                        星期日
+                                    </label>
+                                    <span class="closed-label">公休</span>
+                                </div>
+                                <div class="time-inputs">
+                                    <input type="time" class="form-control" name="sunday_open" disabled>
+                                    <span>-</span>
+                                    <input type="time" class="form-control" name="sunday_close" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- API 設定 -->
+        <div class="tab-pane fade" id="api" role="tabpanel">
+            <div class="content-card">
+                <h4 class="section-title">
+                    <i class="fas fa-plug"></i> API 設定
+                </h4>
+
+                <form id="apiSettingsForm">
+                    <!-- LINE API 設定 -->
+                    <div class="form-section">
+                        <div class="api-header">
+                            <h6>
+                                <i class="fab fa-line" style="color: #00C300;"></i>
+                                LINE API 設定
+                            </h6>
+                            <div class="connection-status" id="lineStatus">
+                                <span class="status-indicator disconnected"></span>
+                                <span class="status-text">未連接</span>
+                            </div>
+                        </div>
+                        
+                        <div class="api-config">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Channel ID</label>
+                                    <input type="text" class="form-control" name="lineChannelId" placeholder="請輸入 LINE Channel ID">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Channel Secret</label>
+                                    <input type="password" class="form-control" name="lineChannelSecret" placeholder="請輸入 Channel Secret">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Channel Access Token</label>
+                                <input type="password" class="form-control" name="lineAccessToken" placeholder="請輸入 Channel Access Token">
+                            </div>
+                            <div class="api-actions">
+                                <button type="button" class="btn btn-primary" id="testLineBtn">
+                                    <i class="fas fa-flask"></i> 測試連接
+                                </button>
+                                <button type="button" class="btn btn-success" id="authorizeLineBtn">
+                                    <i class="fas fa-link"></i> 授權連接
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="api-info">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> LINE API 設定說明</h6>
+                                <ul class="mb-0">
+                                    <li>請先到 <a href="https://developers.line.biz/" target="_blank">LINE Developers</a> 建立 Channel</li>
+                                    <li>取得 Channel ID、Channel Secret 和 Channel Access Token</li>
+                                    <li>設定 Webhook URL：<code id="lineWebhookUrl"></code></li>
+                                    <li>啟用 Use webhook 選項</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Maps API -->
+                    <div class="form-section">
+                        <div class="api-header">
+                            <h6>
+                                <i class="fab fa-google" style="color: #4285F4;"></i>
+                                Google Maps API
+                            </h6>
+                            <div class="connection-status" id="mapsStatus">
+                                <span class="status-indicator disconnected"></span>
+                                <span class="status-text">未設定</span>
+                            </div>
+                        </div>
+                        
+                        <div class="api-config">
+                            <div class="mb-3">
+                                <label class="form-label">Google Maps API Key</label>
+                                <input type="password" class="form-control" name="googleMapsApiKey" placeholder="請輸入 Google Maps API Key">
+                            </div>
+                            <div class="api-actions">
+                                <button type="button" class="btn btn-primary" id="testMapsBtn">
+                                    <i class="fas fa-flask"></i> 測試 API
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 社群媒體設定 -->
+        <div class="tab-pane fade" id="social" role="tabpanel">
+            <div class="content-card">
+                <h4 class="section-title">
+                    <i class="fas fa-share-alt"></i> 社群媒體設定
+                </h4>
+
+                <form id="socialMediaForm">
+                    <!-- Facebook 設定 -->
+                    <div class="form-section">
+                        <div class="api-header">
+                            <h6>
+                                <i class="fab fa-facebook" style="color: #1877F2;"></i>
+                                Facebook 設定
+                            </h6>
+                            <div class="connection-status" id="fbStatus">
+                                <span class="status-indicator disconnected"></span>
+                                <span class="status-text">未連接</span>
+                            </div>
+                        </div>
+                        
+                        <div class="api-config">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Facebook App ID</label>
+                                    <input type="text" class="form-control" name="fbAppId" placeholder="請輸入 Facebook App ID">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Facebook App Secret</label>
+                                    <input type="password" class="form-control" name="fbAppSecret" placeholder="請輸入 App Secret">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Facebook Page Access Token</label>
+                                <input type="password" class="form-control" name="fbPageToken" placeholder="請輸入 Page Access Token">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Facebook Page ID</label>
+                                <input type="text" class="form-control" name="fbPageId" placeholder="請輸入要發文的 Page ID">
+                            </div>
+                            <div class="api-actions">
+                                <button type="button" class="btn btn-primary" id="testFbBtn">
+                                    <i class="fas fa-flask"></i> 測試連接
+                                </button>
+                                <button type="button" class="btn btn-success" id="authorizeFbBtn">
+                                    <i class="fas fa-link"></i> 授權連接
+                                </button>
+                                <button type="button" class="btn btn-info" id="testFbPostBtn">
+                                    <i class="fas fa-paper-plane"></i> 測試發文
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="posting-settings">
+                            <h6>發文設定</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="fbAutoPost" id="fbAutoPost">
+                                <label class="form-check-label" for="fbAutoPost">
+                                    自動發布新作品到 Facebook
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="fbPostBooking" id="fbPostBooking">
+                                <label class="form-check-label" for="fbPostBooking">
+                                    自動發布預約提醒
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Instagram 設定 -->
+                    <div class="form-section">
+                        <div class="api-header">
+                            <h6>
+                                <i class="fab fa-instagram" style="color: #E4405F;"></i>
+                                Instagram 設定
+                            </h6>
+                            <div class="connection-status" id="igStatus">
+                                <span class="status-indicator disconnected"></span>
+                                <span class="status-text">未連接</span>
+                            </div>
+                        </div>
+                        
+                        <div class="api-config">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Instagram Business Account ID</label>
+                                    <input type="text" class="form-control" name="igAccountId" placeholder="請輸入 Instagram Business Account ID">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Instagram Access Token</label>
+                                    <input type="password" class="form-control" name="igAccessToken" placeholder="請輸入 Access Token">
+                                </div>
+                            </div>
+                            <div class="api-actions">
+                                <button type="button" class="btn btn-primary" id="testIgBtn">
+                                    <i class="fas fa-flask"></i> 測試連接
+                                </button>
+                                <button type="button" class="btn btn-success" id="authorizeIgBtn">
+                                    <i class="fas fa-link"></i> 授權連接
+                                </button>
+                                <button type="button" class="btn btn-info" id="testIgPostBtn">
+                                    <i class="fas fa-paper-plane"></i> 測試發文
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="posting-settings">
+                            <h6>發文設定</h6>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="igAutoPost" id="igAutoPost">
+                                <label class="form-check-label" for="igAutoPost">
+                                    自動發布新作品到 Instagram
+                                </label>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">預設標籤</label>
+                                <input type="text" class="form-control" name="igDefaultHashtags" placeholder="#美甲 #nailart #taipei">
+                                <small class="form-text text-muted">多個標籤請用空格分隔</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="api-info">
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-exclamation-triangle"></i> 社群媒體 API 注意事項</h6>
+                            <ul class="mb-0">
+                                <li><strong>Facebook：</strong>需要建立 Facebook App 並通過審核</li>
+                                <li><strong>Instagram：</strong>需要 Instagram Business 帳戶並連結 Facebook Page</li>
+                                <li><strong>權限：</strong>需要適當的 API 權限才能自動發文</li>
+                                <li><strong>限制：</strong>請遵守各平台的 API 使用限制和政策</li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 通知設定 -->
+        <div class="tab-pane fade" id="notification" role="tabpanel">
+            <div class="content-card">
+                <h4 class="section-title">
+                    <i class="fas fa-bell"></i> 通知設定
+                </h4>
+
+                <form id="notificationForm">
+                    <!-- Email 通知 -->
+                    <div class="form-section">
+                        <h6>Email 通知</h6>
+                        <div class="notification-options">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="emailNewBooking" id="emailNewBooking" checked>
+                                <label class="form-check-label" for="emailNewBooking">
+                                    新預約通知
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="emailBookingReminder" id="emailBookingReminder" checked>
+                                <label class="form-check-label" for="emailBookingReminder">
+                                    預約提醒（前一天）
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="emailCancellation" id="emailCancellation" checked>
+                                <label class="form-check-label" for="emailCancellation">
+                                    預約取消通知
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LINE 通知 -->
+                    <div class="form-section">
+                        <h6>LINE 通知</h6>
+                        <div class="notification-options">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="lineNewBooking" id="lineNewBooking">
+                                <label class="form-check-label" for="lineNewBooking">
+                                    新預約通知
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="lineBookingReminder" id="lineBookingReminder">
+                                <label class="form-check-label" for="lineBookingReminder">
+                                    預約提醒（前一天）
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 系統通知 -->
+                    <div class="form-section">
+                        <h6>系統通知</h6>
+                        <div class="notification-options">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="systemMaintenance" id="systemMaintenance" checked>
+                                <label class="form-check-label" for="systemMaintenance">
+                                    系統維護通知
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="systemUpdate" id="systemUpdate" checked>
+                                <label class="form-check-label" for="systemUpdate">
+                                    系統更新通知
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 儲存確認 Modal -->
+    <div class="modal fade" id="saveConfirmModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">確認儲存設定</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>確定要儲存所有設定嗎？</p>
+                    <div class="save-summary" id="saveSummary">
+                        <!-- 變更摘要將在這裡顯示 -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmSaveBtn">確認儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,7 @@
-// ===== 使用 IIFE 避免全域變數污染 =====
-(function() {
+// ===== 儀表板初始化 =====
+function initializeDashboard() {
+    console.log('初始化儀表板頁面');
+    
     // 變數宣告
     let calendar;
     let salesChart;
@@ -205,6 +207,9 @@
     // ===== 初始化調用 =====
     init();
 
-    // ===== 導出清理函數 =====
-    window.dashboardCleanup = cleanup;
-})();
+    // ===== 返回清理函數 =====
+    return cleanup;
+}
+
+// ===== 導出全局函數 =====
+window.initializeDashboard = initializeDashboard;
