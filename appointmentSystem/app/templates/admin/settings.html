@@ -106,98 +106,366 @@
 
                     <!-- 營業時間 -->
                     <div class="form-section">
-                        <h6>營業時間</h6>
-                        <div class="business-hours">
-                            <div class="day-schedule" data-day="monday">
+                        <div class="business-hours-header">
+                            <h6>營業時間</h6>
+                            <div class="quick-actions">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="setAllBusinessDays">
+                                    <i class="fas fa-clock"></i> 統一設定平日
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="copyFromPrevious">
+                                    <i class="fas fa-copy"></i> 複製上一日
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="business-hours-container">
+                            <!-- 週一 -->
+                            <div class="day-card" data-day="monday">
                                 <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox" checked>
-                                        星期一
-                                    </label>
+                                    <div class="day-info">
+                                        <div class="day-name">週一</div>
+                                        <div class="day-name-en">Mon</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="monday_open" value="10:00">
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="monday_close" value="18:00">
+                                <div class="time-display" data-open="10:00" data-close="18:00">
+                                    <div class="time-info active">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info">公休</div>
+                                </div>
+                                <input type="hidden" name="monday_open" value="10:00">
+                                <input type="hidden" name="monday_close" value="18:00">
+                            </div>
+
+                            <!-- 週二 -->
+                            <div class="day-card" data-day="tuesday">
+                                <div class="day-header">
+                                    <div class="day-info">
+                                        <div class="day-name">週二</div>
+                                        <div class="day-name-en">Tue</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="time-display" data-open="10:00" data-close="18:00">
+                                    <div class="time-info active">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info">公休</div>
+                                </div>
+                                <input type="hidden" name="tuesday_open" value="10:00">
+                                <input type="hidden" name="tuesday_close" value="18:00">
+                            </div>
+
+                            <!-- 週三 -->
+                            <div class="day-card" data-day="wednesday">
+                                <div class="day-header">
+                                    <div class="day-info">
+                                        <div class="day-name">週三</div>
+                                        <div class="day-name-en">Wed</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="time-display" data-open="10:00" data-close="18:00">
+                                    <div class="time-info active">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info">公休</div>
+                                </div>
+                                <input type="hidden" name="wednesday_open" value="10:00">
+                                <input type="hidden" name="wednesday_close" value="18:00">
+                            </div>
+
+                            <!-- 週四 -->
+                            <div class="day-card" data-day="thursday">
+                                <div class="day-header">
+                                    <div class="day-info">
+                                        <div class="day-name">週四</div>
+                                        <div class="day-name-en">Thu</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="time-display" data-open="10:00" data-close="18:00">
+                                    <div class="time-info active">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info">公休</div>
+                                </div>
+                                <input type="hidden" name="thursday_open" value="10:00">
+                                <input type="hidden" name="thursday_close" value="18:00">
+                            </div>
+
+                            <!-- 週五 -->
+                            <div class="day-card" data-day="friday">
+                                <div class="day-header">
+                                    <div class="day-info">
+                                        <div class="day-name">週五</div>
+                                        <div class="day-name-en">Fri</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="time-display" data-open="10:00" data-close="18:00">
+                                    <div class="time-info active">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info">公休</div>
+                                </div>
+                                <input type="hidden" name="friday_open" value="10:00">
+                                <input type="hidden" name="friday_close" value="18:00">
+                            </div>
+
+                            <!-- 週六 -->
+                            <div class="day-card" data-day="saturday">
+                                <div class="day-header">
+                                    <div class="day-info">
+                                        <div class="day-name">週六</div>
+                                        <div class="day-name-en">Sat</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle" checked>
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="time-display" data-open="10:00" data-close="18:00">
+                                    <div class="time-info active">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info">公休</div>
+                                </div>
+                                <input type="hidden" name="saturday_open" value="10:00">
+                                <input type="hidden" name="saturday_close" value="18:00">
+                            </div>
+
+                            <!-- 週日 -->
+                            <div class="day-card" data-day="sunday">
+                                <div class="day-header">
+                                    <div class="day-info">
+                                        <div class="day-name">週日</div>
+                                        <div class="day-name-en">Sun</div>
+                                    </div>
+                                    <div class="day-status">
+                                        <label class="switch">
+                                            <input type="checkbox" class="day-toggle">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="time-display" data-open="" data-close="">
+                                    <div class="time-info">
+                                        <span class="open-time">10:00</span>
+                                        <span class="separator">-</span>
+                                        <span class="close-time">18:00</span>
+                                    </div>
+                                    <div class="closed-info active">公休</div>
+                                </div>
+                                <input type="hidden" name="sunday_open" value="">
+                                <input type="hidden" name="sunday_close" value="">
+                            </div>
+                        </div>
+
+                        <!-- 時間設定提示 -->
+                        <div class="business-hours-hint">
+                            <i class="fas fa-info-circle"></i>
+                            點擊日期卡片來設定該日的營業時間
+                        </div>
+                    </div>
+
+                    <!-- 時間設定 Modal -->
+                    <div class="modal fade" id="timeSettingModal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <i class="fas fa-clock"></i>
+                                        <span id="modalDayName">週一</span> 營業時間設定
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="time-setting-container">
+                                        <div class="business-status-toggle">
+                                            <label class="form-check-label d-flex align-items-center">
+                                                <input type="checkbox" class="form-check-input modal-day-toggle" id="modalDayToggle">
+                                                <span class="ms-2">這天有營業</span>
+                                            </label>
+                                        </div>
+
+                                        <div class="time-inputs-container" id="timeInputsContainer">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label class="form-label">開始時間</label>
+                                                    <div class="time-picker-container">
+                                                        <input type="time" class="form-control" id="modalOpenTime" value="10:00">
+                                                        <div class="quick-time-buttons">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="09:00">09:00</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="10:00">10:00</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="11:00">11:00</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label">結束時間</label>
+                                                    <div class="time-picker-container">
+                                                        <input type="time" class="form-control" id="modalCloseTime" value="18:00">
+                                                        <div class="quick-time-buttons">
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="17:00">17:00</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="18:00">18:00</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="19:00">19:00</button>
+                                                            <button type="button" class="btn btn-sm btn-outline-secondary quick-time" data-time="20:00">20:00</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="time-duration-display">
+                                                <i class="fas fa-clock"></i>
+                                                營業時間：<span id="durationDisplay">8 小時</span>
+                                            </div>
+
+                                            <div class="preset-schedules">
+                                                <label class="form-label">常用時段</label>
+                                                <div class="preset-buttons">
+                                                    <button type="button" class="btn btn-sm btn-outline-primary preset-schedule" 
+                                                            data-open="09:00" data-close="17:00">
+                                                        朝九晚五 (09:00-17:00)
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary preset-schedule" 
+                                                            data-open="10:00" data-close="18:00">
+                                                        十點到六點 (10:00-18:00)
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary preset-schedule" 
+                                                            data-open="11:00" data-close="20:00">
+                                                        晚班時段 (11:00-20:00)
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary preset-schedule" 
+                                                            data-open="13:00" data-close="21:00">
+                                                        下午班 (13:00-21:00)
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="closed-notice" id="closedNotice" style="display: none;">
+                                            <div class="alert alert-info">
+                                                <i class="fas fa-info-circle"></i>
+                                                這天設定為公休日
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary" id="saveTimeSettings">
+                                        <i class="fas fa-save"></i> 儲存
+                                    </button>
                                 </div>
                             </div>
-                            <div class="day-schedule" data-day="tuesday">
-                                <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox" checked>
-                                        星期二
-                                    </label>
+                        </div>
+                    </div>
+
+                    <!-- 統一設定 Modal -->
+                    <div class="modal fade" id="bulkTimeSettingModal" tabindex="-1">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        <i class="fas fa-calendar-week"></i>
+                                        批量設定營業時間
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="tuesday_open" value="10:00">
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="tuesday_close" value="18:00">
+                                <div class="modal-body">
+                                    <div class="bulk-setting-container">
+                                        <div class="mb-3">
+                                            <label class="form-label">選擇要設定的日期</label>
+                                            <div class="day-selection">
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="monday" checked>
+                                                    週一
+                                                </label>
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="tuesday" checked>
+                                                    週二
+                                                </label>
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="wednesday" checked>
+                                                    週三
+                                                </label>
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="thursday" checked>
+                                                    週四
+                                                </label>
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="friday" checked>
+                                                    週五
+                                                </label>
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="saturday">
+                                                    週六
+                                                </label>
+                                                <label class="form-check-label d-block">
+                                                    <input type="checkbox" class="form-check-input bulk-day" value="sunday">
+                                                    週日
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <label class="form-label">開始時間</label>
+                                                <input type="time" class="form-control" id="bulkOpenTime" value="10:00">
+                                            </div>
+                                            <div class="col-6">
+                                                <label class="form-label">結束時間</label>
+                                                <input type="time" class="form-control" id="bulkCloseTime" value="18:00">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="day-schedule" data-day="wednesday">
-                                <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox" checked>
-                                        星期三
-                                    </label>
-                                </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="wednesday_open" value="10:00">
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="wednesday_close" value="18:00">
-                                </div>
-                            </div>
-                            <div class="day-schedule" data-day="thursday">
-                                <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox" checked>
-                                        星期四
-                                    </label>
-                                </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="thursday_open" value="10:00">
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="thursday_close" value="18:00">
-                                </div>
-                            </div>
-                            <div class="day-schedule" data-day="friday">
-                                <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox" checked>
-                                        星期五
-                                    </label>
-                                </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="friday_open" value="10:00">
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="friday_close" value="18:00">
-                                </div>
-                            </div>
-                            <div class="day-schedule" data-day="saturday">
-                                <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox" checked>
-                                        星期六
-                                    </label>
-                                </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="saturday_open" value="10:00">
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="saturday_close" value="18:00">
-                                </div>
-                            </div>
-                            <div class="day-schedule" data-day="sunday">
-                                <div class="day-header">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input day-toggle" type="checkbox">
-                                        星期日
-                                    </label>
-                                    <span class="closed-label">公休</span>
-                                </div>
-                                <div class="time-inputs">
-                                    <input type="time" class="form-control" name="sunday_open" disabled>
-                                    <span>-</span>
-                                    <input type="time" class="form-control" name="sunday_close" disabled>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                    <button type="button" class="btn btn-primary" id="saveBulkTimeSettings">
+                                        <i class="fas fa-save"></i> 套用到選中的日期
+                                    </button>
                                 </div>
                             </div>
                         </div>

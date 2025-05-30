@@ -129,53 +129,349 @@
 }
 
 /* 營業時間設定 */
-.business-hours {
+.business-hours-header {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.day-schedule {
-    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #edf2f7;
+    margin-bottom: 20px;
 }
 
-.day-header {
-    min-width: 120px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.day-header .form-check-label {
-    font-weight: 500;
+.business-hours-header h6 {
     margin: 0;
 }
 
-.closed-label {
+.quick-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.business-hours-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.day-card {
+    background: white;
+    border: 2px solid #edf2f7;
+    border-radius: 12px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.day-card:hover {
+    border-color: #DB7093;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(219, 112, 147, 0.15);
+}
+
+.day-card.closed {
+    background: #f8f9fa;
+    border-color: #e2e8f0;
+}
+
+.day-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.day-info {
+    text-align: center;
+}
+
+.day-name {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 1rem;
+}
+
+.day-name-en {
+    font-size: 0.8rem;
+    color: #718096;
+    text-transform: uppercase;
+}
+
+.day-status {
+    margin-top: 5px;
+}
+
+/* 自定義開關 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #DB7093;
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.time-display {
+    margin-top: auto;
+}
+
+.time-info {
+    display: none;
+    font-size: 0.9rem;
+    color: #2d3748;
+    font-weight: 500;
+}
+
+.time-info.active {
+    display: block;
+}
+
+.time-info .separator {
+    color: #718096;
+    margin: 0 4px;
+}
+
+.closed-info {
+    display: none;
     color: #e53e3e;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-.time-inputs {
+.closed-info.active {
+    display: block;
+}
+
+.business-hours-hint {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: #0369a1;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.business-hours-hint i {
+    margin-right: 8px;
+    color: #0284c7;
+}
+
+/* 時間設定 Modal 樣式 */
+.time-setting-container {
+    padding: 10px 0;
+}
+
+.business-status-toggle {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.business-status-toggle .form-check-input {
+    margin-right: 10px;
+}
+
+.time-inputs-container {
+    transition: all 0.3s ease;
+}
+
+.time-picker-container {
+    position: relative;
+}
+
+.quick-time-buttons {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-left: auto;
+    gap: 5px;
+    margin-top: 8px;
+    flex-wrap: wrap;
 }
 
-.time-inputs input[type="time"] {
-    width: 120px;
+.quick-time {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
-.time-inputs span {
-    color: #718096;
+.quick-time:hover {
+    background-color: #DB7093;
+    border-color: #DB7093;
+    color: white;
+}
+
+.time-duration-display {
+    background: #e6fffa;
+    border: 1px solid #81e6d9;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 20px 0;
+    text-align: center;
+    color: #2c7a7b;
     font-weight: 500;
+}
+
+.time-duration-display i {
+    margin-right: 8px;
+    color: #38b2ac;
+}
+
+.preset-schedules {
+    margin-top: 20px;
+}
+
+.preset-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.preset-schedule {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.preset-schedule:hover {
+    background-color: #DB7093;
+    border-color: #DB7093;
+    color: white;
+}
+
+.closed-notice {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* 批量設定 Modal */
+.bulk-setting-container {
+    padding: 10px 0;
+}
+
+.day-selection {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.day-selection .form-check-label {
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+    padding: 5px 0;
+}
+
+.day-selection .form-check-input:checked + span {
+    color: #DB7093;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .business-hours-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+    }
+    
+    .day-card {
+        min-height: 100px;
+        padding: 12px;
+    }
+    
+    .quick-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .quick-actions .btn {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+    }
+    
+    .preset-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .day-selection {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .business-hours-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .day-card {
+        min-height: 90px;
+        padding: 10px;
+    }
+    
+    .day-name {
+        font-size: 0.9rem;
+    }
+    
+    .day-name-en {
+        font-size: 0.7rem;
+    }
+    
+    .time-info {
+        font-size: 0.8rem;
+    }
+    
+    .quick-time-buttons {
+        justify-content: center;
+    }
 }
 
 /* API 設定區域 */

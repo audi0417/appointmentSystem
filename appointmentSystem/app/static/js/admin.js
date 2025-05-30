@@ -95,6 +95,9 @@ class Router {
                 case 'services':
                     if (typeof initializeServices === 'function') await initializeServices();
                     break;
+                case 'settings':
+                    if (typeof initializeSettings === 'function') await initializeSettings();
+                    break;
             }
         }, 100);
     }
@@ -279,6 +282,20 @@ function registerRoutes() {
             mainContent.innerHTML = html;
         } catch (error) {
             console.error("載入作品集失敗:", error);
+            mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
+        }
+    });
+
+    // 系統設定路由
+    router.addRoute("settings", async () => {
+        const mainContent = document.querySelector(".main-content");
+        try {
+            const response = await fetch("/admin/settings");
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const html = await response.text();
+            mainContent.innerHTML = html;
+        } catch (error) {
+            console.error("載入系統設定失敗:", error);
             mainContent.innerHTML = '<div class="error-message">載入失敗</div>';
         }
     });
