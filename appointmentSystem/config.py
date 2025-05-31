@@ -4,8 +4,9 @@ from datetime import timedelta
 class Config:
     # 基本配置
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key'
-    # 使用 SQLite
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///nail_salon.db'
+    # 使用 SQLite - 設置資料庫在 app 目錄下
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app', 'nail_salon.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # JWT配置

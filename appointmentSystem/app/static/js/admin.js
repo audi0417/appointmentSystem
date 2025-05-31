@@ -150,31 +150,59 @@ class Router {
 function initSidebar() {
     const sidebarToggle = document.getElementById("sidebar-toggle");
     const sidebar = document.querySelector(".sidebar");
+    const mainContent = document.querySelector(".main-content");
     
     // 創建手機版遮罩層
     let overlay = document.querySelector('.sidebar-overlay');
-    if (!overlay && window.innerWidth <= 768) {
-        overlay = document.createElement('div');
-        overlay.className = 'sidebar-overlay';
-        document.body.appendChild(overlay);
+    
+    function createOverlay() {
+        if (!overlay && window.innerWidth <= 768) {
+            overlay = document.createElement('div');
+            overlay.className = 'sidebar-overlay';
+            document.body.appendChild(overlay);
+            
+            // 遮罩層點擊事件
+            overlay.addEventListener("click", () => {
+                sidebar?.classList.remove("active");
+                overlay.classList.remove("active");
+            });
+        }
+    }
+    
+    function removeOverlay() {
+        if (overlay && window.innerWidth > 768) {
+            overlay.remove();
+            overlay = null;
+        }
     }
 
     sidebarToggle?.addEventListener("click", () => {
-        const isActive = sidebar?.classList.toggle("active");
-        if (overlay) {
-            overlay.classList.toggle("active", isActive);
+        if (window.innerWidth <= 768) {
+            // 手機版功能：顯示/隱藏側邊欄
+            const isActive = sidebar?.classList.toggle("active");
+            if (overlay) {
+                overlay.classList.toggle("active", isActive);
+            }
+        } else {
+            // 桌面版功能：收合/展開側邊欄
+            const isCollapsed = sidebar?.classList.toggle("collapsed");
+            mainContent?.classList.toggle("sidebar-collapsed", isCollapsed);
+            document.body.classList.toggle("sidebar-collapsed", isCollapsed); // 添加 body class
+            
+            // 保存狀態到 localStorage
+            localStorage.setItem('sidebarCollapsed', isCollapsed);
         }
     });
 
-    // 點擊遮罩層或側邊欄外部關閉側邊欄
+    // 點擊側邊欄外部關閉側邊欄（僅手機版）
     document.addEventListener("click", (e) => {
         if (
+            window.innerWidth <= 768 &&
             sidebar &&
             sidebar.classList.contains("active") &&
             !sidebar.contains(e.target) &&
             sidebarToggle &&
-            !sidebarToggle.contains(e.target) &&
-            window.innerWidth <= 768
+            !sidebarToggle.contains(e.target)
         ) {
             sidebar.classList.remove("active");
             if (overlay) {
@@ -183,20 +211,44 @@ function initSidebar() {
         }
     });
 
-    // 遮罩層點擊事件
-    overlay?.addEventListener("click", () => {
-        sidebar?.classList.remove("active");
-        overlay.classList.remove("active");
-    });
-
-    window.addEventListener("resize", () => {
+    // 視窗大小變更時的處理
+    function handleResize() {
         if (window.innerWidth > 768) {
+            // 桌面版：移除手機版狀態，恢復收合狀態
             sidebar?.classList.remove("active");
             if (overlay) {
                 overlay.classList.remove("active");
             }
+            removeOverlay();
+            
+            // 恢復保存的收合狀態
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            sidebar?.classList.toggle("collapsed", isCollapsed);
+            mainContent?.classList.toggle("sidebar-collapsed", isCollapsed);
+            document.body.classList.toggle("sidebar-collapsed", isCollapsed); // 添加 body class
+            
+        } else {
+            // 手機版：移除桌面版狀態，創建遮罩層
+            sidebar?.classList.remove("collapsed");
+            mainContent?.classList.remove("sidebar-collapsed");
+            document.body.classList.remove("sidebar-collapsed"); // 移除 body class
+            createOverlay();
         }
-    });
+    }
+    
+    // 初始化時處理
+    handleResize();
+    
+    // 確保初始化時狀態同步
+    if (window.innerWidth > 768) {
+        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+        if (isCollapsed) {
+            document.body.classList.add("sidebar-collapsed");
+        }
+    }
+    
+    // 監聽視窗大小變更
+    window.addEventListener("resize", handleResize);
 }
 
 // ===== 事件監聽初始化 =====

@@ -1,72 +1,84 @@
 # app/routes/admin.py
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, session
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from functools import wraps
+from app.models.user import User
+from app import db
+from datetime import datetime
 import json
 import os
+import uuid
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
-def admin_required():
-    def wrapper(fn):
-        @wraps(fn)
-        def decorator(*args, **kwargs):
-            # 檢查使用者權限
-            return fn(*args, **kwargs)
-        return decorator
-    return wrapper
+def login_required(f):
+    """檢查用戶是否已登入"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('auth.login_page'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 @bp.route('/')
-@admin_required()
-def index():
+@login_required
+def admin_index():
     return render_template('admin/admin.html')
 
 @bp.route('/dashboard')
-@admin_required()
+@login_required
 def dashboard():
     return render_template('admin/dashboard.html')
 
 @bp.route('/appointments')
-@admin_required()
+@login_required
 def appointments():
     return render_template('admin/appointments.html')
 
 @bp.route('/members')
-@admin_required()
+@login_required
 def members():
     return render_template('admin/members.html')
 
 @bp.route('/portfolio')
-@admin_required()
+@login_required
 def portfolio():
     return render_template('admin/portfolio.html')
 
 @bp.route('/services')
-@admin_required()
+@login_required
 def services():
     return render_template('admin/services.html')
 
 @bp.route('/settings')
-@admin_required()
+@login_required
 def settings():
     return render_template('admin/settings.html')
 
 # 設定 API 路由
 @bp.route('/api/settings', methods=['GET'])
-@admin_required()
+@login_required
 def get_settings():
-    """獲取系統設定"""
+    """獲取系統設定 - 從當前登入用戶獲取"""
     try:
-        # 模擬從資料庫或配置文件讀取設定
+        # 獲取當前登入用戶
+        user = User.query.get(session['user_id'])
+        if not user:
+            return jsonify({
+                'success': False,
+                'message': '用戶不存在'
+            }), 404
+        
+        # 從用戶資料構建設定
         settings = {
             'basic': {
-                'storeName': '美甲工作室',
-                'storeNameEn': 'Nail Art Studio',
-                'phone': '02-1234-5678',
-                'email': 'info@nailstudio.com',
-                'address': '台北市大安區忠孝東路四段123號',
-                'description': '專業美甲服務，提供各種美甲設計',
-                'avatar': '/static/images/default-store.svg',
+                'storeName': user.business_name or user.username,
+                'storeNameEn': '',  # 可擴展欄位
+                'phone': user.phone or '',
+                'email': user.email or '',
+                'address': user.address or '',
+                'description': '',  # 可擴展欄位
+                'avatar': user.get_avatar_url(),
                 'businessHours': {
                     'monday': {'open': '10:00', 'close': '18:00', 'enabled': True},
                     'tuesday': {'open': '10:00', 'close': '18:00', 'enabled': True},
@@ -118,22 +130,49 @@ def get_settings():
         }), 500
 
 @bp.route('/api/settings', methods=['POST'])
-@admin_required()
+@login_required
 def save_settings():
-    """儲存系統設定"""
+    """儲存系統設定 - 更新到當前登入用戶"""
     try:
         data = request.get_json()
+        user = User.query.get(session['user_id'])
+        
+        if not user:
+            return jsonify({
+                'success': False,
+                'message': '用戶不存在'
+            }), 404
+        
+        # 獲取基本資料設定
+        basic_settings = data.get('basic', {})
         
         # 驗證必要欄位
-        if not data.get('basic', {}).get('storeName'):
+        store_name = basic_settings.get('storeName', '').strip()
+        if not store_name:
             return jsonify({
                 'success': False,
                 'message': '商家名稱為必填欄位'
             }), 400
         
-        # 在實際應用中，這裡會將設定儲存到資料庫
-        # 目前只是模擬儲存過程
-        print(f"儲存設定: {json.dumps(data, indent=2, ensure_ascii=False)}")
+        # 更新用戶資料
+        user.business_name = store_name
+        user.email = basic_settings.get('email', '').strip() or None
+        user.phone = basic_settings.get('phone', '').strip() or None
+        user.address = basic_settings.get('address', '').strip() or None
+        
+        # 處理頭像
+        avatar_url = basic_settings.get('avatar')
+        if avatar_url and avatar_url != '/static/images/default-avatar.svg':
+            user.avatar_url = avatar_url
+        
+        user.updated_at = datetime.utcnow()
+        
+        # 保存到資料庫
+        db.session.commit()
+        
+        # 更新session中的資訊
+        session['business_name'] = user.business_name
+        session['avatar_url'] = user.get_avatar_url()
         
         return jsonify({
             'success': True,
@@ -141,13 +180,14 @@ def save_settings():
         })
         
     except Exception as e:
+        db.session.rollback()
         return jsonify({
             'success': False,
             'message': f'儲存失敗: {str(e)}'
         }), 500
 
 @bp.route('/api/settings/test-line', methods=['POST'])
-@admin_required()
+@login_required
 def test_line_api():
     """測試 LINE API 連接"""
     try:
@@ -189,7 +229,7 @@ def test_line_api():
         }), 500
 
 @bp.route('/api/settings/test-maps', methods=['POST'])
-@admin_required()
+@login_required
 def test_maps_api():
     """測試 Google Maps API"""
     try:
@@ -227,7 +267,7 @@ def test_maps_api():
         }), 500
 
 @bp.route('/api/settings/test-facebook', methods=['POST'])
-@admin_required()
+@login_required
 def test_facebook_api():
     """測試 Facebook API"""
     try:
@@ -267,7 +307,7 @@ def test_facebook_api():
         }), 500
 
 @bp.route('/api/settings/test-instagram', methods=['POST'])
-@admin_required()
+@login_required
 def test_instagram_api():
     """測試 Instagram API"""
     try:
@@ -306,7 +346,7 @@ def test_instagram_api():
         }), 500
 
 @bp.route('/api/settings/test-post/<platform>', methods=['POST'])
-@admin_required()
+@login_required
 def test_social_post(platform):
     """測試社群媒體發文"""
     try:
@@ -343,7 +383,7 @@ def test_social_post(platform):
         }), 500
 
 @bp.route('/api/settings/upload-avatar', methods=['POST'])
-@admin_required()
+@login_required
 def upload_avatar():
     """上傳商家大頭貼"""
     try:
@@ -381,13 +421,36 @@ def upload_avatar():
                 'message': '檔案大小不能超過 2MB'
             }), 400
         
-        # 在實際應用中，這裡會將檔案儲存到適當的位置
-        # 目前只是模擬上傳過程
-        import time
-        time.sleep(1)
+        # 獲取當前用戶
+        user = User.query.get(session['user_id'])
+        if not user:
+            return jsonify({
+                'success': False,
+                'message': '用戶不存在'
+            }), 404
         
-        # 模擬返回上傳後的檔案路徑
-        avatar_url = f'/static/images/avatars/{file.filename}'
+        # 生成檔案名稱
+        file_extension = file.filename.rsplit('.', 1)[1].lower()
+        filename = f"avatar_{user.id}_{uuid.uuid4().hex[:8]}.{file_extension}"
+        
+        # 確保上傳目錄存在
+        upload_dir = os.path.join('app', 'static', 'images', 'avatars')
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        # 保存檔案
+        file_path = os.path.join(upload_dir, filename)
+        file.save(file_path)
+        
+        # 生成URL
+        avatar_url = f'/static/images/avatars/{filename}'
+        
+        # 更新用戶頭像
+        user.avatar_url = avatar_url
+        user.updated_at = datetime.utcnow()
+        db.session.commit()
+        
+        # 更新session
+        session['avatar_url'] = avatar_url
         
         return jsonify({
             'success': True,
@@ -396,6 +459,7 @@ def upload_avatar():
         })
         
     except Exception as e:
+        db.session.rollback()
         return jsonify({
             'success': False,
             'message': f'上傳失敗: {str(e)}'

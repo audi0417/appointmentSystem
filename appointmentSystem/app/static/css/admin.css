@@ -16,6 +16,7 @@ body {
 .admin-container {
     display: flex;
     min-height: 100vh;
+    position: relative;
 }
 
 /* ===== 側邊導航 ===== */
@@ -23,14 +24,22 @@ body {
     width: 260px;
     background: white;
     box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
+    transition: left 0.3s ease; /* 改為 left 屬性的過渡 */
     z-index: 1000;
+    position: fixed; /* 固定位置 */
+    left: 0;
+    top: 0;
+    height: 100vh; /* 滿版高度 */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* 允許內容滾動 */
 }
 
 .sidebar-header {
     padding: 20px;
     text-align: center;
     border-bottom: 1px solid #eee;
+    flex-shrink: 0; /* 防止標題區被壓縮 */
 }
 
 .logo {
@@ -50,6 +59,9 @@ body {
 .nav-links {
     list-style: none;
     padding: 20px 0;
+    flex: 1;
+    padding-bottom: 140px; /* 為商家資訊區預留更多空間 */
+    overflow-y: auto; /* 如果導航項目太多時允許滾動 */
 }
 
 .nav-links li {
@@ -83,12 +95,112 @@ body {
     text-align: center;
 }
 
+/* ===== 商家資訊區域 ===== */
+.user-profile {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 1px solid #eee;
+    padding: 15px 20px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.05); /* 添加上方陰影 */
+    z-index: 10; /* 確保在最上層 */
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-info .avatar {
+    width: 45px;
+    height: 45px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.profile-info .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #f0f0f0;
+}
+
+.user-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.business-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.username {
+    font-size: 0.8rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-profile, .btn-logout {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.btn-profile {
+    background: #f8f9fa;
+    color: #666;
+}
+
+.btn-profile:hover {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.btn-logout {
+    background: #FFE4E1;
+    color: #DB7093;
+}
+
+.btn-logout:hover {
+    background: #DB7093;
+    color: white;
+}
+
 /* ===== 主要內容區 ===== */
 .main-content {
     flex: 1;
     padding: 20px;
     overflow-x: hidden;
     position: relative;
+    margin-left: 260px; /* 為固定側邊欄預留空間 */
+    min-height: 100vh;
+    background-color: #F8F9FA;
+    transition: margin-left 0.3s ease; /* 添加平滑過渡 */
 }
 
 /* ===== 頂部導航 ===== */
@@ -105,18 +217,62 @@ body {
 
 .sidebar-toggle {
     border: none;
-    background: none;
-    font-size: 1.5rem;
-    color: #666;
+    background: linear-gradient(135deg, #DB7093 0%, #C76086 100%);
+    color: white;
     cursor: pointer;
-    display: none;
-    padding: 8px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    z-index: 1002;
+    
+    /* 桌面版樣式 - 半圓形收合按鈕 */
+    position: fixed;
+    top: 50%;
+    left: 260px; /* 貼在側邊欄右邊緣 */
+    transform: translateY(-50%);
+    width: 24px;
+    height: 48px;
+    border-radius: 0 24px 24px 0; /* 右半圓 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+    font-size: 1rem;
+    transition: left 0.3s ease, transform 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease; /* 添加更多過渡動畫 */
 }
 
 .sidebar-toggle:hover {
-    background: #f5f5f5;
+    background: linear-gradient(135deg, #C76086 0%, #B85579 100%);
+    transform: translateY(-50%) translateX(2px);
+    box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+}
+
+/* 側邊欄收合狀態 */
+.sidebar.collapsed {
+    left: -260px;
+}
+
+/* 使用 body 的 class 來控制按鈕狀態 */
+body.sidebar-collapsed .sidebar-toggle {
+    left: 0; /* 移到最左邊 */
+    /* 保持右半圓形狀，不改變 border-radius */
+    /* border-radius 保持原樣：0 24px 24px 0 */
+    /* box-shadow 保持原樣 */
+}
+
+body.sidebar-collapsed .sidebar-toggle .desktop-icon {
+    transform: rotate(180deg); /* 收合時箭頭反向 */
+}
+
+.main-content.sidebar-collapsed {
+    margin-left: 24px; /* 只為半圓按鈕預留空間 */
+}
+
+/* 箭頭圖標動畫 */
+.sidebar-toggle .desktop-icon {
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+.sidebar-toggle .mobile-icon {
+    display: none;
 }
 
 .search-bar {
@@ -629,23 +785,55 @@ body {
 
 @media (max-width: 768px) {
     .admin-container {
-        flex-direction: column;
+        flex-direction: row; /* 保持水平布局 */
     }
     
     .sidebar {
         position: fixed;
-        left: -260px;
+        left: -260px; /* 預設隱藏 */
         height: 100vh;
         z-index: 1001;
         transition: left 0.3s ease;
     }
 
     .sidebar.active {
-        left: 0;
+        left: 0; /* 顯示側邊欄 */
     }
 
+    /* 手機版按鈕樣式 */
     .sidebar-toggle {
-        display: block !important;
+        /* 重置為手機版樣式 */
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        width: 45px;
+        height: 45px;
+        border-radius: 8px !important; /* 強制覆蓋半圓樣式 */
+        background: white;
+        color: #666;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important; /* 強制覆蓋陰影 */
+        transform: none !important; /* 移除箭頭旋轉 */
+        transition: all 0.2s ease; /* 簡化過渡動畫 */
+    }
+    
+    .sidebar-toggle:hover {
+        background: #f5f5f5;
+        color: #DB7093;
+        transform: scale(1.05);
+    }
+    
+    /* 手機版使用選單圖標 */
+    .sidebar-toggle .desktop-icon {
+        display: none;
+    }
+    
+    .sidebar-toggle .mobile-icon {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0; /* 移除左邊距 */
+        padding: 60px 15px 15px 15px; /* 為上方的選單按鈕預留空間 */
     }
 
     .summary-cards {
@@ -655,14 +843,6 @@ body {
 
     .search-bar {
         display: none;
-    }
-
-    .main-content {
-        padding: 15px;
-    }
-    
-    .top-bar {
-        padding: 10px 15px;
     }
     
     .card {
@@ -699,5 +879,9 @@ body {
     
     .top-bar-right {
         gap: 10px;
+    }
+    
+    .main-content {
+        padding: 60px 10px 10px 10px;
     }
 }

@@ -27,9 +27,10 @@
     <link href="{{ url_for('static', filename='css/settings.css') }}" rel="stylesheet">
 </head>
 <body>
-    <!-- 手機版側邊欄切換按鈕 -->
+    <!-- 側邊欄收合/切換按鈕 -->
     <button class="sidebar-toggle" id="sidebar-toggle">
-        <i class='bx bx-menu'></i>
+        <i class='bx bx-chevron-left desktop-icon'></i>
+        <i class='bx bx-menu mobile-icon'></i>
     </button>
     
     <div class="admin-container">
@@ -78,6 +79,30 @@
                     </a>
                 </li>
              </ul>
+             
+             <!-- 商家資訊區域 -->
+             <div class="user-profile">
+                 <div class="profile-info">
+                     <div class="avatar">
+                         <img src="{{ session.get('avatar_url', '/static/images/default-avatar.svg') }}" 
+                              alt="商家頭像" id="userAvatar">
+                     </div>
+                     <div class="user-details">
+                         <div class="business-name" id="businessName">
+                             {{ session.get('business_name') or session.get('username', '商家') }}
+                         </div>
+                         <div class="username">@{{ session.get('username', 'user') }}</div>
+                     </div>
+                 </div>
+                 <div class="profile-actions">
+                     <button class="btn-profile" onclick="showProfileModal()" title="編輯資料">
+                         <i class='bx bx-edit'></i>
+                     </button>
+                     <button class="btn-logout" onclick="confirmLogout()" title="登出">
+                         <i class='bx bx-log-out'></i>
+                     </button>
+                 </div>
+             </div>
         </nav>
 
         <!-- 主要內容區 -->
@@ -101,5 +126,56 @@
     
     <!-- 主要管理系統 -->
     <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+    
+    <!-- 登入系統功能 -->
+    <script>
+        // 登出功能
+        function confirmLogout() {
+            if (confirm('確定要登出嗎？')) {
+                window.location.href = '{{ url_for("auth.logout") }}';
+            }
+        }
+        
+        // 顯示個人資料編輯模窗
+        function showProfileModal() {
+            // 這裡可以實作一個模窗来編輯個人資料
+            // 暂時跳轉到設定頁面
+            // 如果你想要一個独立的資料編輯頁面，可以在這裡實作
+            alert('個人資料編輯功能正在開發中...');
+        }
+        
+        // 更新用戶資訊
+        function updateUserProfile(userData) {
+            const businessNameEl = document.getElementById('businessName');
+            const userAvatarEl = document.getElementById('userAvatar');
+            
+            if (businessNameEl && userData.business_name) {
+                businessNameEl.textContent = userData.business_name;
+            }
+            
+            if (userAvatarEl && userData.avatar_url) {
+                userAvatarEl.src = userData.avatar_url;
+            }
+        }
+        
+        // 檢查登入狀態
+        function checkLoginStatus() {
+            fetch('{{ url_for("auth.check_auth") }}')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.authenticated) {
+                        window.location.href = '{{ url_for("auth.login_page") }}';
+                    }
+                })
+                .catch(error => {
+                    console.error('檢查登入狀態失敗:', error);
+                });
+        }
+        
+        // 頁面載入時檢查登入狀態
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+    </script>
 </body>
 </html>

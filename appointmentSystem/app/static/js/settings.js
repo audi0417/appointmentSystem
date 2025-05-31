@@ -99,7 +99,13 @@ function initializeSettings() {
 
             // 表單變更監聽
             document.querySelectorAll('#basicInfoForm input, #basicInfoForm textarea').forEach(input => {
-                input.addEventListener('input', () => this.onSettingsChanged());
+                input.addEventListener('input', () => {
+                    this.onSettingsChanged();
+                    // 即時更新左下角顯示
+                    if (input.name === 'storeName') {
+                        this.updateSidebarDisplayName(input.value);
+                    }
+                });
             });
 
             document.querySelectorAll('#apiSettingsForm input').forEach(input => {
@@ -198,51 +204,23 @@ function initializeSettings() {
             try {
                 this.showLoading();
                 
-                // 模擬 API 調用
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // 從後端API載入設定
+                const response = await fetch('/admin/api/settings');
                 
-                // 載入預設設定
-                this.settings = {
-                    basic: {
-                        storeName: '美甲工作室',
-                        storeNameEn: 'Nail Studio',
-                        phone: '02-1234-5678',
-                        email: 'info@nailstudio.com',
-                        address: '台北市信義區信義路五段7號',
-                        description: '專業美甲服務，打造您的指尖時尚',
-                        avatar: '/static/images/default-store.png'
-                    },
-                    api: {
-                        lineChannelId: '',
-                        lineChannelSecret: '',
-                        lineAccessToken: '',
-                        googleMapsApiKey: ''
-                    },
-                    social: {
-                        fbAppId: '',
-                        fbAppSecret: '',
-                        fbPageToken: '',
-                        fbPageId: '',
-                        fbAutoPost: false,
-                        fbPostBooking: false,
-                        igAccountId: '',
-                        igAccessToken: '',
-                        igAutoPost: false,
-                        igDefaultHashtags: '#美甲 #nailart #taipei'
-                    },
-                    notifications: {
-                        emailNewBooking: true,
-                        emailBookingReminder: true,
-                        emailCancellation: true,
-                        lineNewBooking: false,
-                        lineBookingReminder: false,
-                        systemMaintenance: true,
-                        systemUpdate: true
-                    }
-                };
-
-                this.originalSettings = JSON.parse(JSON.stringify(this.settings));
-                this.populateForm();
+                if (!response.ok) {
+                    throw new Error('載入設定失敗');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    this.settings = result.data;
+                    this.originalSettings = JSON.parse(JSON.stringify(this.settings));
+                    this.populateForm();
+                    this.updateSidebarUserInfo();
+                } else {
+                    throw new Error(result.message);
+                }
                 
             } catch (error) {
                 console.error('載入設定失敗:', error);
@@ -252,11 +230,32 @@ function initializeSettings() {
             }
         }
 
+        updateSidebarUserInfo() {
+            // 更新左下角的用戶資訊
+            const businessNameEl = document.getElementById('businessName');
+            const userAvatarEl = document.getElementById('userAvatar');
+            
+            if (businessNameEl && this.settings.basic.storeName) {
+                businessNameEl.textContent = this.settings.basic.storeName;
+            }
+            
+            if (userAvatarEl && this.settings.basic.avatar) {
+                userAvatarEl.src = this.settings.basic.avatar;
+            }
+        }
+
+        updateSidebarDisplayName(newName) {
+            const businessNameEl = document.getElementById('businessName');
+            if (businessNameEl && newName.trim()) {
+                businessNameEl.textContent = newName.trim();
+            }
+        }
+
         populateForm() {
             // 填充基本資料表單
             Object.keys(this.settings.basic).forEach(key => {
                 const input = document.querySelector(`[name="${key}"]`);
-                if (input && key !== 'avatar') {
+                if (input && key !== 'avatar' && key !== 'businessHours') {
                     input.value = this.settings.basic[key] || '';
                 }
             });
@@ -267,15 +266,22 @@ function initializeSettings() {
                 avatarImg.src = this.settings.basic.avatar || '/static/images/default-store.png';
             }
 
-            // 填充 API 設定表單
+            // 填充其他表單
+            this.populateApiSettings();
+            this.populateSocialSettings();
+            this.populateNotificationSettings();
+        }
+
+        populateApiSettings() {
             Object.keys(this.settings.api).forEach(key => {
                 const input = document.querySelector(`[name="${key}"]`);
                 if (input) {
                     input.value = this.settings.api[key] || '';
                 }
             });
+        }
 
-            // 填充社群媒體表單
+        populateSocialSettings() {
             Object.keys(this.settings.social).forEach(key => {
                 const input = document.querySelector(`[name="${key}"]`);
                 if (input) {
@@ -286,14 +292,17 @@ function initializeSettings() {
                     }
                 }
             });
+        }
 
-            // 填充通知設定表單
+        populateNotificationSettings() {
             Object.keys(this.settings.notifications).forEach(key => {
                 const input = document.querySelector(`[name="${key}"]`);
                 if (input && input.type === 'checkbox') {
                     input.checked = this.settings.notifications[key] || false;
                 }
             });
+
+
         }
 
         initWebhookUrls() {
@@ -602,22 +611,36 @@ function initializeSettings() {
             try {
                 this.showLoading();
 
-                // 創建預覽
-                const reader = new FileReader();
-                reader.onload = (e) => {
+                // 使用FormData上傳檔案
+                const formData = new FormData();
+                formData.append('avatar', file);
+
+                const response = await fetch('/admin/api/settings/upload-avatar', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // 更新頭像顯示
                     const avatarImg = document.getElementById('storeAvatar');
                     if (avatarImg) {
-                        avatarImg.src = e.target.result;
+                        avatarImg.src = result.avatar_url;
                     }
                     
-                    this.settings.basic.avatar = e.target.result;
+                    // 更新側邊欄頭像
+                    const userAvatarEl = document.getElementById('userAvatar');
+                    if (userAvatarEl) {
+                        userAvatarEl.src = result.avatar_url;
+                    }
+                    
+                    this.settings.basic.avatar = result.avatar_url;
                     this.onSettingsChanged();
-                };
-                reader.readAsDataURL(file);
-
-                // 模擬上傳
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                this.showSuccess('頭像上傳成功');
+                    this.showSuccess('頭像上傳成功');
+                } else {
+                    throw new Error(result.message);
+                }
 
             } catch (error) {
                 console.error('頭像上傳失敗:', error);
@@ -955,20 +978,35 @@ function initializeSettings() {
                     notifications: this.collectFormData('notificationForm')
                 };
 
-                // 模擬儲存 API 調用
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // 發送到後端API
+                const response = await fetch('/admin/api/settings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(allSettings)
+                });
                 
-                // 更新本地設定
-                this.settings = allSettings;
-                this.originalSettings = JSON.parse(JSON.stringify(allSettings));
-                this.hasChanges = false;
+                const result = await response.json();
                 
-                // 關閉確認對話框
-                const modal = bootstrap.Modal.getInstance(document.getElementById('saveConfirmModal'));
-                if (modal) modal.hide();
-                
-                this.updateSaveButton();
-                this.showSuccess('所有設定已成功儲存');
+                if (result.success) {
+                    // 更新本地設定
+                    this.settings = allSettings;
+                    this.originalSettings = JSON.parse(JSON.stringify(allSettings));
+                    this.hasChanges = false;
+                    
+                    // 更新側邊欄顯示
+                    this.updateSidebarUserInfo();
+                    
+                    // 關閉確認對話框
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('saveConfirmModal'));
+                    if (modal) modal.hide();
+                    
+                    this.updateSaveButton();
+                    this.showSuccess('所有設定已成功儲存');
+                } else {
+                    throw new Error(result.message);
+                }
                 
             } catch (error) {
                 console.error('儲存設定失敗:', error);
