@@ -125,7 +125,22 @@
     padding: 15px 20px;
     border-top: 1px solid #edf2f7;
     display: flex;
-    gap: 10px;
+    gap: 6px;
+    align-items: center;
+}
+
+.portfolio-actions .btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
 /* 圖片上傳預覽 */
@@ -189,6 +204,28 @@
     font-size: 0.9rem;
 }
 
+/* Modal樣式修正 */
+.modal {
+    z-index: 1055;
+}
+
+.modal-backdrop {
+    z-index: 1054;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block !important;
+}
+
+.modal.fade.show {
+    opacity: 1;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
 /* 響應式設計 */
 @media (max-width: 1200px) {
     .portfolio-grid {
@@ -211,6 +248,12 @@
 
     .portfolio-description {
         font-size: 0.9rem;
+    }
+    
+    .portfolio-actions .btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
     }
 }
 

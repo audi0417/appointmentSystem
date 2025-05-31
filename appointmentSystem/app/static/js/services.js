@@ -63,10 +63,20 @@ function initializeServices() {
             }
 
             // Modal關閉按鈕
-            document.querySelector('#serviceFormModal .close')?.addEventListener('click', 
+            document.querySelector('#serviceFormModal .btn-close')?.addEventListener('click', 
                 () => this.hideModal());
-            document.getElementById('cancelServiceBtn')?.addEventListener('click', 
+            document.querySelector('#serviceFormModal .btn-secondary')?.addEventListener('click', 
                 () => this.hideModal());
+            
+            // Modal backdrop點擊關閉
+            const modal = document.getElementById('serviceFormModal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        this.hideModal();
+                    }
+                });
+            }
         }
 
         initCategoryOptions() {
@@ -206,15 +216,15 @@ function initializeServices() {
                     </div>
                     <div class="service-actions">
                         <button onclick="window.serviceManager?.editService(${service.id})" 
-                                class="action-btn edit" title="編輯">
+                                class="btn btn-sm btn-outline-primary" title="編輯">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button onclick="window.serviceManager?.toggleService(${service.id})" 
-                                class="action-btn toggle" title="${service.status === 'active' ? '下架' : '上架'}">
+                                class="btn btn-sm btn-outline-info" title="${service.status === 'active' ? '下架' : '上架'}">
                             <i class="fas fa-${service.status === 'active' ? 'eye-slash' : 'eye'}"></i>
                         </button>
                         <button onclick="window.serviceManager?.deleteService(${service.id})" 
-                                class="action-btn delete" title="刪除">
+                                class="btn btn-sm btn-outline-danger" title="刪除">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -223,11 +233,18 @@ function initializeServices() {
         }
 
         showModal(service = null) {
+            console.log('顯示 Modal:', service);
             const modal = document.getElementById('serviceFormModal');
             const form = document.getElementById('serviceForm');
             const title = document.getElementById('serviceModalTitle');
 
-            if (!modal || !form) return;
+            console.log('Modal 元素:', modal);
+            console.log('Form 元素:', form);
+            
+            if (!modal || !form) {
+                console.error('找不到 Modal 或 Form 元素');
+                return;
+            }
 
             if (service) {
                 if (title) title.textContent = '編輯服務項目';
@@ -257,13 +274,51 @@ function initializeServices() {
                 this.clearImagePreview();
             }
 
-            modal.style.display = 'block';
+            // 使用Bootstrap modal方法顯示
+            if (window.bootstrap && window.bootstrap.Modal) {
+                console.log('使用 Bootstrap Modal');
+                const bsModal = new window.bootstrap.Modal(modal);
+                bsModal.show();
+                console.log('Bootstrap Modal 已顯示');
+            } else {
+                console.log('使用備用 Modal 方案');
+                // 備用方案：直接操作CSS
+                modal.classList.add('show');
+                modal.style.display = 'block';
+                modal.setAttribute('aria-hidden', 'false');
+                document.body.classList.add('modal-open');
+                
+                // 添加backdrop
+                if (!document.querySelector('.modal-backdrop')) {
+                    const backdrop = document.createElement('div');
+                    backdrop.className = 'modal-backdrop fade show';
+                    document.body.appendChild(backdrop);
+                }
+            }
         }
 
         hideModal() {
             const modal = document.getElementById('serviceFormModal');
-            if (modal) {
+            if (!modal) return;
+            
+            // 使用Bootstrap modal方法隱藏
+            if (window.bootstrap && window.bootstrap.Modal) {
+                const bsModal = window.bootstrap.Modal.getInstance(modal);
+                if (bsModal) {
+                    bsModal.hide();
+                }
+            } else {
+                // 備用方案：直接操作CSS
+                modal.classList.remove('show');
                 modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('modal-open');
+                
+                // 移除backdrop
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.remove();
+                }
             }
         }
 
@@ -349,9 +404,13 @@ function initializeServices() {
         }
 
         editService(id) {
+            console.log('編輯服務:', id);
             const service = this.services.find(s => s.id === id);
             if (service) {
+                console.log('找到服務:', service);
                 this.showModal(service);
+            } else {
+                console.error('找不到服務 ID:', id);
             }
         }
 
@@ -500,8 +559,8 @@ function initializeServices() {
         document.getElementById('serviceSearch')?.removeEventListener('input');
         document.getElementById('addServiceBtn')?.removeEventListener('click');
         document.getElementById('serviceForm')?.removeEventListener('submit');
-        document.querySelector('#serviceFormModal .close')?.removeEventListener('click');
-        document.getElementById('cancelServiceBtn')?.removeEventListener('click');
+        document.querySelector('#serviceFormModal .btn-close')?.removeEventListener('click');
+        document.querySelector('#serviceFormModal .btn-secondary')?.removeEventListener('click');
         
         // 清理全局變數
         if (window.serviceManager) {

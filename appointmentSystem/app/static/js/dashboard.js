@@ -4,14 +4,12 @@ function initializeDashboard() {
     
     // 變數宣告
     let calendar;
-    let salesChart;
 
     // ===== 初始化 =====
     function init() {
         // 等待 DOM 和套件都準備好
         waitForDependencies().then(() => {
             initCalendar();
-            initSalesChart();
             initEventListeners();
             loadDashboardData();
         }).catch(error => {
@@ -23,20 +21,41 @@ function initializeDashboard() {
     function waitForDependencies() {
         return new Promise((resolve, reject) => {
             let attempts = 0;
-            const interval = setInterval(() => {
-                if (
-                    typeof FullCalendar !== 'undefined' &&
-                    typeof Chart !== 'undefined' &&
-                    document.getElementById('calendar') &&
-                    document.getElementById('salesChart')
-                ) {
-                    clearInterval(interval);
+            const maxAttempts = 100; // 10秒超時
+            
+            const checkDependencies = () => {
+                const hasFullCalendar = typeof FullCalendar !== 'undefined';
+                const hasCalendarEl = !!document.getElementById('calendar');
+                
+                console.log('Dependency check:', {
+                    FullCalendar: hasFullCalendar,
+                    CalendarElement: hasCalendarEl,
+                    Attempt: attempts + 1
+                });
+                
+                if (hasFullCalendar && hasCalendarEl) {
+                    console.log('所有依賴都已準備就緒');
                     resolve();
-                } else if (attempts >= 50) { // 5秒後超時
-                    clearInterval(interval);
-                    reject(new Error('載入相依套件超時'));
+                    return true;
                 }
+                
+                return false;
+            };
+            
+            // 立即檢查一次
+            if (checkDependencies()) return;
+            
+            const interval = setInterval(() => {
                 attempts++;
+                
+                if (checkDependencies()) {
+                    clearInterval(interval);
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(interval);
+                    const error = new Error(`載入相依套件超時 (${attempts} 次嘗試)`);
+                    console.error(error);
+                    reject(error);
+                }
             }, 100);
         });
     }
@@ -44,92 +63,65 @@ function initializeDashboard() {
     // ===== 行事曆初始化 =====
     function initCalendar() {
         const calendarEl = document.getElementById('calendar');
-        if (!calendarEl) return;
+        if (!calendarEl) {
+            console.warn('找不到日曆元素');
+            return;
+        }
 
-        calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'zh-tw',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            buttonText: {
-                today: '今天',
-                month: '月',
-                week: '週',
-                day: '日'
-            },
-            events: [
-                {
-                    title: '林小姐 - 基礎保養',
-                    start: '2024-11-25T14:30:00',
-                    backgroundColor: '#DB7093',
-                    borderColor: '#DB7093'
-                }
-            ],
-            eventClick: function(info) {
-                showEventDetails(info.event);
-            },
-            dateClick: function(info) {
-                showAddEventModal(info.date);
-            }
-        });
-
-        calendar.render();
-    }
-
-    // ===== 圖表初始化 =====
-    function initSalesChart() {
-        const chartEl = document.getElementById('salesChart');
-        if (!chartEl) return;
-
-        const ctx = chartEl.getContext('2d');
-        salesChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['週一', '週二', '週三', '週四', '週五', '週六', '週日'],
-                datasets: [{
-                    label: '營業額',
-                    data: [12000, 19000, 15000, 17000, 22000, 25000, 20000],
-                    backgroundColor: 'rgba(219, 112, 147, 0.2)',
-                    borderColor: '#DB7093',
-                    borderWidth: 2,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false }
+        try {
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'zh-tw',
+                height: 'auto',
+                aspectRatio: 1.35,
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth'
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value.toLocaleString();
-                            }
-                        }
+                buttonText: {
+                    today: '今天',
+                    month: '月',
+                    week: '週',
+                    day: '日'
+                },
+                dayMaxEvents: 3,
+                moreLinkText: function(num) {
+                    return '+' + num + ' 個';
+                },
+                events: [
+                    {
+                        title: '林小姐 - 基礎保養',
+                        start: '2025-05-30T14:30:00',
+                        backgroundColor: '#DB7093',
+                        borderColor: '#DB7093',
+                        textColor: '#ffffff'
+                    },
+                    {
+                        title: '陳先生 - 凝臠美甲',
+                        start: '2025-05-28T10:00:00',
+                        backgroundColor: '#87CEEB',
+                        borderColor: '#87CEEB',
+                        textColor: '#ffffff'
                     }
+                ],
+                eventClick: function(info) {
+                    showEventDetails(info.event);
+                },
+                dateClick: function(info) {
+                    showAddEventModal(info.date);
                 }
-            }
-        });
+            });
+
+            calendar.render();
+            console.log('日曆初始化成功');
+        } catch (error) {
+            console.error('日曆初始化失敗:', error);
+        }
     }
 
     // ===== 事件監聽初始化 =====
     function initEventListeners() {
-        // 時期選擇器
-        document.querySelectorAll('.period-selector button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.period-selector button')
-                    .forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                updateSalesChart(this.textContent);
-            });
-        });
-
         // 待辦事項勾選
         document.querySelectorAll('.task-item input[type="checkbox"]')
             .forEach(checkbox => {
@@ -166,26 +158,51 @@ function initializeDashboard() {
         });
     }
 
-    function updateSalesChart(period) {
-        const data = {
-            '週': [12000, 19000, 15000, 17000, 22000, 25000, 20000],
-            '月': [150000, 180000, 200000, 170000],
-            '年': [2000000, 2200000, 1800000, 2500000]
-        };
-
-        if (salesChart && data[period]) {
-            salesChart.data.datasets[0].data = data[period];
-            salesChart.update();
-        }
-    }
-
     // ===== 事件處理函數 =====
     function showEventDetails(event) {
         console.log('Event details:', event);
+        
+        // 顯示預約詳情
+        const details = `
+預約詳情：
+標題：${event.title}
+日期：${event.start.toLocaleDateString('zh-TW')}
+時間：${event.start.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })}
+        `;
+        
+        if (confirm(details + '\n\n是否要編輯此預約？')) {
+            // 跳轉到預約管理頁面
+            window.location.hash = '#appointments';
+        }
     }
 
     function showAddEventModal(date) {
         console.log('Add event for date:', date);
+        
+        const dateStr = date.toLocaleDateString('zh-TW');
+        const result = confirm(`新增預約\n日期：${dateStr}\n\n點擊「確定」前往預約管理頁面新增預約`);
+        
+        if (result) {
+            // 將選擇的日期儲存在 localStorage 中
+            localStorage.setItem('selectedAppointmentDate', date.toISOString().split('T')[0]);
+            // 跳轉到預約管理頁面
+            window.location.hash = '#appointments';
+            // 小延遲後觸發新增預約按鈕
+            setTimeout(() => {
+                const addButton = document.querySelector('button[data-bs-toggle="modal"][data-bs-target="#appointmentModal"]');
+                if (addButton) {
+                    addButton.click();
+                    // 如果有預約日期輸入框，自動填入日期
+                    setTimeout(() => {
+                        const dateInput = document.querySelector('input[name="appointmentDate"]');
+                        if (dateInput) {
+                            dateInput.value = localStorage.getItem('selectedAppointmentDate');
+                            localStorage.removeItem('selectedAppointmentDate');
+                        }
+                    }, 200);
+                }
+            }, 500);
+        }
     }
 
     function updateTaskStatus(taskId, completed) {
@@ -197,10 +214,6 @@ function initializeDashboard() {
         if (calendar) {
             calendar.destroy();
             calendar = null;
-        }
-        if (salesChart) {
-            salesChart.destroy();
-            salesChart = null;
         }
     }
 

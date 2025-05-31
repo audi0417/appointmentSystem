@@ -42,6 +42,7 @@ class AppointmentManager {
         this.initServiceOptions();
         this.loadSampleData();
         this.renderAppointments();
+        this.bindActionButtons();
     }
 
     initModal() {
@@ -225,12 +226,18 @@ class AppointmentManager {
     }
 
     renderAppointments() {
+        console.log('渲染預約列表 - 開始');
         const tbody = document.getElementById('appointmentsList');
-        if (!tbody) return;
+        if (!tbody) {
+            console.error('找不到 appointmentsList 元素');
+            return;
+        }
 
         const startIndex = (this.currentPage - 1) * this.pageSize;
         const endIndex = startIndex + this.pageSize;
         const pageData = this.filteredAppointments.slice(startIndex, endIndex);
+
+        console.log('渲染數據:', pageData.length, '筆');
 
         if (pageData.length === 0) {
             tbody.innerHTML = `
@@ -246,62 +253,95 @@ class AppointmentManager {
             return;
         }
 
-        tbody.innerHTML = pageData.map(appointment => `
-            <tr data-id="${appointment.id}">
-                <td>
-                    <input type="checkbox" class="form-check-input appointment-checkbox" 
-                           value="${appointment.id}" 
-                           ${this.selectedIds.has(appointment.id.toString()) ? 'checked' : ''}>
-                </td>
-                <td>#${appointment.id.toString().padStart(4, '0')}</td>
-                <td>
-                    <div class="customer-info">
-                        <div class="customer-avatar">
-                            <i class="fas fa-user-circle fa-2x text-muted"></i>
+        // 生成表格 HTML
+        const tableHTML = pageData.map(appointment => {
+            const statusClass = appointment.status || 'pending';
+            const statusLabel = this.statusLabels[statusClass] || '未知';
+            
+            // 為待確認狀態的預約顯示確認按鈕
+            const confirmButton = appointment.status === 'pending' ? `
+                <button type="button" 
+                        class="btn btn-sm btn-outline-success" 
+                        title="確認"
+                        data-action="confirm"
+                        data-id="${appointment.id}"
+                        style="min-width: 36px; height: 36px;">
+                    <i class="fas fa-check"></i>
+                </button>
+            ` : '';
+            
+            return `
+                <tr data-id="${appointment.id}">
+                    <td>
+                        <input type="checkbox" class="form-check-input appointment-checkbox" 
+                               value="${appointment.id}" 
+                               ${this.selectedIds.has(appointment.id.toString()) ? 'checked' : ''}>
+                    </td>
+                    <td>#${appointment.id.toString().padStart(4, '0')}</td>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-avatar">
+                                <i class="fas fa-user-circle fa-2x text-muted"></i>
+                            </div>
+                            <div class="customer-details">
+                                <div class="customer-name">${this.escapeHtml(appointment.customerName)}</div>
+                                <div class="customer-phone">${appointment.phone}</div>
+                            </div>
                         </div>
-                        <div class="customer-details">
-                            <div class="customer-name">${this.escapeHtml(appointment.customerName)}</div>
-                            <div class="customer-phone text-muted">${appointment.phone}</div>
-                        </div>
-                    </div>
-                </td>
-                <td>${this.escapeHtml(appointment.serviceName)}</td>
-                <td>${this.formatDateTime(appointment.appointmentDate, appointment.appointmentTime)}</td>
-                <td class="text-end">NT$ ${appointment.amount.toLocaleString()}</td>
-                <td>
-                    <span class="status-badge ${appointment.status}">
-                        ${this.statusLabels[appointment.status]}
-                    </span>
-                </td>
-                <td>
-                    <div class="action-buttons">
-                        <button onclick="appointmentManager.viewAppointment(${appointment.id})" 
-                                class="btn btn-sm btn-outline-info" title="查看">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button onclick="appointmentManager.editAppointment(${appointment.id})" 
-                                class="btn btn-sm btn-outline-primary" title="編輯">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        ${appointment.status === 'pending' ? `
-                            <button onclick="appointmentManager.confirmAppointment(${appointment.id})" 
-                                    class="btn btn-sm btn-outline-success" title="確認">
-                                <i class="fas fa-check"></i>
+                    </td>
+                    <td class="service-name">${this.escapeHtml(appointment.serviceName)}</td>
+                    <td class="appointment-time">${this.formatDateTime(appointment.appointmentDate, appointment.appointmentTime)}</td>
+                    <td class="appointment-amount">NT$ ${appointment.amount.toLocaleString()}</td>
+                    <td>
+                        <span class="status-badge ${statusClass}">
+                            ${statusLabel}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-info" 
+                                    title="查看"
+                                    data-action="view"
+                                    data-id="${appointment.id}"
+                                    style="min-width: 36px; height: 36px;">
+                                <i class="fas fa-eye"></i>
                             </button>
-                        ` : ''}
-                        <button onclick="appointmentManager.deleteAppointment(${appointment.id})" 
-                                class="btn btn-sm btn-outline-danger" title="刪除">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        `).join('');
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-primary" 
+                                    title="編輯"
+                                    data-action="edit"
+                                    data-id="${appointment.id}"
+                                    style="min-width: 36px; height: 36px;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${confirmButton}
+                            <button type="button" 
+                                    class="btn btn-sm btn-outline-danger" 
+                                    title="刪除"
+                                    data-action="delete"
+                                    data-id="${appointment.id}"
+                                    style="min-width: 36px; height: 36px;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        tbody.innerHTML = tableHTML;
+        console.log('表格 HTML 已設定');
 
         // 重新綁定checkbox事件
         tbody.querySelectorAll('.appointment-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', e => this.handleCheckboxChange(e));
         });
+
+        // 綁定操作按鈕事件
+        this.bindActionButtons();
+        
+        console.log('渲染預約列表 - 完成');
     }
 
     updatePagination() {
@@ -320,7 +360,7 @@ class AppointmentManager {
         // 上一頁
         paginationHTML += `
             <li class="page-item ${this.currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" onclick="appointmentManager.changePage(${this.currentPage - 1}); return false;">上一頁</a>
+                <a class="page-link" href="#" data-page="${this.currentPage - 1}">上一頁</a>
             </li>
         `;
 
@@ -331,7 +371,7 @@ class AppointmentManager {
         for (let i = startPage; i <= endPage; i++) {
             paginationHTML += `
                 <li class="page-item ${this.currentPage === i ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="appointmentManager.changePage(${i}); return false;">${i}</a>
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
                 </li>
             `;
         }
@@ -339,11 +379,14 @@ class AppointmentManager {
         // 下一頁
         paginationHTML += `
             <li class="page-item ${this.currentPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link" href="#" onclick="appointmentManager.changePage(${this.currentPage + 1}); return false;">下一頁</a>
+                <a class="page-link" href="#" data-page="${this.currentPage + 1}">下一頁</a>
             </li>
         `;
 
         pagination.innerHTML = paginationHTML;
+        
+        // 綁定分頁事件
+        setTimeout(() => this.bindPaginationEvents(), 0);
     }
 
     changePage(page) {
@@ -386,6 +429,76 @@ class AppointmentManager {
         }
     }
 
+    bindActionButtons() {
+        const tbody = document.getElementById('appointmentsList');
+        if (!tbody) {
+            console.error('bindActionButtons: 找不到 tbody 元素');
+            return;
+        }
+
+        // 使用事件委託處理按鈕點擊
+        tbody.removeEventListener('click', this.handleActionButtonClick);
+        tbody.addEventListener('click', this.handleActionButtonClick.bind(this));
+        
+        // 檢查按鈕是否存在
+        const buttons = tbody.querySelectorAll('button[data-action]');
+        console.log('bindActionButtons: 找到', buttons.length, '個操作按鈕');
+        
+        // 為每個按鈕添加調試信息
+        buttons.forEach((btn, index) => {
+            console.log(`按鈕 ${index + 1}: action=${btn.dataset.action}, id=${btn.dataset.id}`);
+        });
+    }
+
+    bindPaginationEvents() {
+        const pagination = document.getElementById('pagination');
+        if (!pagination) return;
+
+        pagination.removeEventListener('click', this.handlePaginationClick);
+        pagination.addEventListener('click', this.handlePaginationClick.bind(this));
+    }
+
+    handlePaginationClick(event) {
+        event.preventDefault();
+        const link = event.target.closest('a[data-page]');
+        if (!link) return;
+        
+        const page = parseInt(link.dataset.page);
+        if (page && !isNaN(page)) {
+            this.changePage(page);
+        }
+    }
+
+    handleActionButtonClick(event) {
+        const button = event.target.closest('button[data-action]');
+        if (!button) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const action = button.dataset.action;
+        const id = parseInt(button.dataset.id);
+
+        if (!id) return;
+
+        switch (action) {
+            case 'view':
+                this.viewAppointment(id);
+                break;
+            case 'edit':
+                this.editAppointment(id);
+                break;
+            case 'confirm':
+                this.confirmAppointment(id);
+                break;
+            case 'delete':
+                this.deleteAppointment(id);
+                break;
+            default:
+                console.warn('未知的操作類型:', action);
+        }
+    }
+
     async saveAppointment() {
         const form = document.getElementById('appointmentForm');
         if (!form) return;
@@ -421,29 +534,50 @@ class AppointmentManager {
             // 獲取服務資訊
             const service = this.services.find(s => s.id === appointmentData.serviceId);
             
-            // 創建新預約
-            const newAppointment = {
-                id: Date.now(), // 簡單的ID生成
-                customerName: appointmentData.customerName,
-                phone: appointmentData.phone,
-                serviceId: appointmentData.serviceId,
-                serviceName: service.name,
-                appointmentDate: appointmentData.appointmentDate,
-                appointmentTime: appointmentData.appointmentTime,
-                amount: service.price,
-                status: 'pending',
-                notes: appointmentData.notes,
-                createdAt: new Date().toISOString()
-            };
-
-            this.appointments.unshift(newAppointment);
-            this.filterAppointments();
+            const editId = form.dataset.editId;
             
-            this.modal.hide();
-            this.showSuccess('預約創建成功！');
+            if (editId) {
+                // 編輯模式
+                const existingAppointment = this.appointments.find(a => a.id == editId);
+                if (existingAppointment) {
+                    existingAppointment.customerName = appointmentData.customerName;
+                    existingAppointment.phone = appointmentData.phone;
+                    existingAppointment.serviceId = appointmentData.serviceId;
+                    existingAppointment.serviceName = service.name;
+                    existingAppointment.appointmentDate = appointmentData.appointmentDate;
+                    existingAppointment.appointmentTime = appointmentData.appointmentTime;
+                    existingAppointment.amount = service.price;
+                    existingAppointment.notes = appointmentData.notes;
+                }
+                
+                this.filterAppointments();
+                this.modal.hide();
+                this.showSuccess('預約更新成功！');
+            } else {
+                // 新增模式
+                const newAppointment = {
+                    id: Date.now(), // 簡單的ID生成
+                    customerName: appointmentData.customerName,
+                    phone: appointmentData.phone,
+                    serviceId: appointmentData.serviceId,
+                    serviceName: service.name,
+                    appointmentDate: appointmentData.appointmentDate,
+                    appointmentTime: appointmentData.appointmentTime,
+                    amount: service.price,
+                    status: 'pending',
+                    notes: appointmentData.notes,
+                    createdAt: new Date().toISOString()
+                };
+
+                this.appointments.unshift(newAppointment);
+                this.filterAppointments();
+                
+                this.modal.hide();
+                this.showSuccess('預約創建成功！');
+            }
 
         } catch (error) {
-            this.showError('預約創建失敗：' + error.message);
+            this.showError('操作失敗：' + error.message);
         } finally {
             this.hideLoading();
         }
@@ -637,7 +771,25 @@ function bulkDelete() {
 // 初始化函數
 function initializeAppointments() {
     console.log('初始化預約管理頁面');
-    window.appointmentManager = new AppointmentManager();
+    
+    // 延遲初始化以確保 DOM 完全載入
+    setTimeout(() => {
+        try {
+            window.appointmentManager = new AppointmentManager();
+            console.log('AppointmentManager 初始化成功');
+        } catch (error) {
+            console.error('AppointmentManager 初始化失敗:', error);
+            // 重試一次
+            setTimeout(() => {
+                try {
+                    window.appointmentManager = new AppointmentManager();
+                    console.log('AppointmentManager 重試初始化成功');
+                } catch (retryError) {
+                    console.error('AppointmentManager 重試初始化失敗:', retryError);
+                }
+            }, 500);
+        }
+    }, 100);
 }
 
 // 清理函數

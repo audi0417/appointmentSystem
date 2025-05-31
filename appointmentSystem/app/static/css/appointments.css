@@ -1,116 +1,381 @@
 /* ===== 預約管理頁面樣式 ===== */
-@import 'variables.css';
 
 /* === 預約表格容器 === */
 .appointments-table {
-    overflow-x: auto;
-    background-color: var(--card-background);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--space-6);
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow-x: auto; /* 添加水平滾動 */
+    margin-bottom: 20px;
+    min-width: 100%; /* 確保表格有足夠寬度 */
 }
 
-/* === 客戶資訊 === */
+/* 確保表格有最小寬度 */
+.appointments-table .table {
+    min-width: 1200px; /* 設置最小寬度 */
+    width: 100%;
+    table-layout: auto; /* 讓表格自動調整欄位寬度 */
+}
+
+/* 設置各欄位的寬度 */
+.appointments-table .table th:nth-child(1),
+.appointments-table .table td:nth-child(1) {
+    width: 50px; /* 選擇框 */
+    min-width: 50px;
+}
+
+.appointments-table .table th:nth-child(2),
+.appointments-table .table td:nth-child(2) {
+    width: 100px; /* 預約編號 */
+    min-width: 100px;
+}
+
+.appointments-table .table th:nth-child(3),
+.appointments-table .table td:nth-child(3) {
+    width: 200px; /* 客戶資訊 */
+    min-width: 200px;
+}
+
+.appointments-table .table th:nth-child(4),
+.appointments-table .table td:nth-child(4) {
+    width: 120px; /* 服務項目 */
+    min-width: 120px;
+}
+
+.appointments-table .table th:nth-child(5),
+.appointments-table .table td:nth-child(5) {
+    width: 180px; /* 預約時間 */
+    min-width: 180px;
+}
+
+.appointments-table .table th:nth-child(6),
+.appointments-table .table td:nth-child(6) {
+    width: 100px; /* 金額 */
+    min-width: 100px;
+}
+
+.appointments-table .table th:nth-child(7),
+.appointments-table .table td:nth-child(7) {
+    width: 100px; /* 狀態 */
+    min-width: 100px;
+}
+
+.appointments-table .table th:nth-child(8),
+.appointments-table .table td:nth-child(8) {
+    width: 200px; /* 操作 */
+    min-width: 200px;
+    text-align: center; /* 操作欄位置中對齊 */
+}
+
+/* === 客戶資訊樣式 === */
 .customer-info {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    gap: 12px;
+    min-width: 0;
 }
 
-.customer-info img {
-    width: 35px;
-    height: 35px;
+.customer-avatar {
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.customer-avatar img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    background-color: var(--neutral-200);
 }
 
-.customer-info .details {
-    line-height: var(--line-height-tight);
+.customer-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
 }
 
-.customer-info .name {
-    font-weight: var(--font-weight-medium);
-    color: var(--neutral-800);
+.customer-name {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 14px;
+    line-height: 1.3;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.customer-info .phone {
-    font-size: var(--font-size-sm);
-    color: var(--neutral-600);
+.customer-phone {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.2;
+    margin: 0;
 }
 
-/* === 預約狀態 === */
+/* === 操作按鈕組 === */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px; /* 確保按鈕有足夠空間 */
+    flex-wrap: nowrap; /* 防止按鈕折行 */
+}
+
+.action-buttons .btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-width: 1px;
+    border-style: solid;
+    flex-shrink: 0; /* 防止按鈕被壓縮 */
+}
+
+.action-buttons .btn-sm {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+    padding: 5px 7px;
+}
+
+/* === 預約狀態樣式 === */
 .status-badge {
     display: inline-block;
-    padding: var(--space-1) var(--space-3);
-    border-radius: var(--radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
     text-align: center;
-    min-width: 80px;
+    min-width: 70px;
+    white-space: nowrap;
 }
 
 .status-badge.pending {
-    background-color: var(--warning-light);
-    color: var(--warning-color);
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
 }
 
 .status-badge.confirmed {
-    background-color: var(--info-light);
-    color: var(--info-color);
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
 }
 
 .status-badge.completed {
-    background-color: var(--success-light);
-    color: var(--success-color);
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 .status-badge.cancelled {
-    background-color: var(--danger-light);
-    color: var(--danger-color);
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
-/* === 預約詳情 === */
-.appointment-details {
-    padding: var(--space-4);
-}
-
-.details-group {
-    margin-bottom: var(--space-5);
-}
-
-.details-group h6 {
-    color: var(--neutral-600);
-    font-size: var(--font-size-sm);
-    margin-bottom: var(--space-2);
-    font-weight: var(--font-weight-semibold);
-}
-
-.details-group p {
-    margin: 0;
-    margin-bottom: var(--space-2);
-    color: var(--neutral-800);
-    font-weight: var(--font-weight-medium);
-}
-
-/* === 批量操作 === */
+/* === 批量操作樣式 === */
 .bulk-actions {
-    margin-bottom: var(--space-4);
-    padding: var(--space-3);
-    background-color: var(--neutral-100);
-    border-radius: var(--radius-md);
     display: none;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    gap: 10px;
+    align-items: center;
+}
+
+.bulk-actions.show {
+    display: flex;
+}
+
+/* === 分頁控制樣式 === */
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 15px 0;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.page-size {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.page-size select {
+    height: 32px;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #495057;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pagination .page-item {
+    display: flex;
+}
+
+.pagination .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 6px 12px;
+    color: #6c757d;
+    text-decoration: none;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    background-color: #fff;
+}
+
+.pagination .page-link:hover {
+    background-color: #f8f9fa;
+    color: #495057;
+    border-color: #adb5bd;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #DB7093;
+    border-color: #DB7093;
+    color: #fff;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #adb5bd;
+    background-color: #fff;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+/* === Modal 樣式修正 === */
+.modal {
+    z-index: 1055;
+}
+
+.modal-backdrop {
+    z-index: 1054;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block !important;
+}
+
+.modal.fade.show {
+    opacity: 1;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
+/* === 表單區域 === */
+.form-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.form-section h6 {
+    margin-bottom: 15px;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 1rem;
 }
 
 /* === 響應式調整 === */
 @media (max-width: 768px) {
-    .customer-info img {
-        width: 30px;
-        height: 30px;
+    .customer-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+    
+    .customer-name {
+        font-size: 13px;
+    }
+    
+    .customer-phone {
+        font-size: 11px;
+    }
+    
+    .action-buttons .btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+    
+    .action-buttons .btn-sm {
+        min-width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+    
+    .status-badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        min-width: 60px;
+    }
+    
+    .pagination-controls {
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+    
+    .pagination .page-link {
+        min-width: 32px;
+        height: 32px;
+        font-size: 13px;
     }
 }
 
 @media (max-width: 576px) {
+    /* 表格響應式處理 - 隱藏部分欄位 */
     .table th:nth-child(4),
     .table td:nth-child(4),
     .table th:nth-child(6),
@@ -118,7 +383,63 @@
         display: none;
     }
 
-    .customer-info .phone {
+    .customer-phone {
         display: none;
     }
+    
+    .customer-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .action-buttons {
+        gap: 4px;
+    }
+}
+
+/* === 預約詳情樣式 === */
+.appointment-details {
+    padding: 20px;
+}
+
+.details-group {
+    margin-bottom: 20px;
+}
+
+.details-group h6 {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.details-group p {
+    margin: 0;
+    margin-bottom: 8px;
+    color: #495057;
+    font-weight: 500;
+}
+
+/* === 時間格式化 === */
+.appointment-time {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* === 金額格式化 === */
+.appointment-amount {
+    font-weight: 600;
+    color: #28a745;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* === 服務項目樣式 === */
+.service-name {
+    font-weight: 500;
+    color: #495057;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

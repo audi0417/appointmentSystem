@@ -6,6 +6,269 @@
     transition: background-color 0.3s ease;
 }
 
+/* 會員表格容器 */
+.members-table {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    overflow-x: auto; /* 添加水平滾動 */
+    margin-bottom: 20px;
+    min-width: 100%; /* 確保表格有足夠寬度 */
+}
+
+/* 確保表格有最小寬度 */
+.members-table .table {
+    min-width: 1200px; /* 縮短總寬度 */
+    width: 100%;
+    table-layout: auto; /* 讓表格自動調整欄位寬度 */
+}
+
+/* 設置各欄位的寬度 */
+.members-table .table th:nth-child(1),
+.members-table .table td:nth-child(1) {
+    width: 50px; /* 選擇框 */
+    min-width: 50px;
+}
+
+.members-table .table th:nth-child(2),
+.members-table .table td:nth-child(2) {
+    width: 80px; /* 會員編號 - 縮短 */
+    min-width: 80px;
+}
+
+.members-table .table th:nth-child(3),
+.members-table .table td:nth-child(3) {
+    width: 180px; /* 基本資料 */
+    min-width: 180px;
+}
+
+.members-table .table th:nth-child(4),
+.members-table .table td:nth-child(4) {
+    width: 160px; /* 聯絡方式 */
+    min-width: 160px;
+}
+
+.members-table .table th:nth-child(5),
+.members-table .table td:nth-child(5) {
+    width: 90px; /* 會員等級 */
+    min-width: 90px;
+}
+
+.members-table .table th:nth-child(6),
+.members-table .table td:nth-child(6) {
+    width: 120px; /* 加入日期 */
+    min-width: 120px;
+}
+
+.members-table .table th:nth-child(7),
+.members-table .table td:nth-child(7) {
+    width: 180px; /* 消費統計 */
+    min-width: 180px;
+}
+
+.members-table .table th:nth-child(8),
+.members-table .table td:nth-child(8) {
+    width: 80px; /* 狀態 */
+    min-width: 80px;
+}
+
+.members-table .table th:nth-child(9),
+.members-table .table td:nth-child(9) {
+    width: 200px; /* 操作 */
+    min-width: 200px;
+    text-align: center; /* 操作欄位置中對齊 */
+}
+
+/* 操作按鈕組樣式 */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    min-width: 180px; /* 確保按鈕有足夠空間 */
+    flex-wrap: nowrap; /* 防止按鈕折行 */
+}
+
+.action-buttons .btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-width: 1px;
+    border-style: solid;
+    flex-shrink: 0; /* 防止按鈕被壓縮 */
+}
+
+.action-buttons .btn-sm {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+    padding: 5px 7px;
+}
+
+/* 會員資訊區域 */
+.member-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.member-info .member-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-weight: 500;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.member-info .member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-info .member-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.member-info .member-name {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 14px;
+    line-height: 1.3;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.member-info .member-id {
+    font-size: 12px;
+    color: #718096;
+    line-height: 1.2;
+    margin: 0;
+}
+
+/* 聯絡資訊 */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.contact-info div:first-child {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.contact-info div:last-child {
+    font-size: 13px;
+    color: #718096;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* 會員等級 */
+.member-level {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.member-level.vip {
+    background: #fef5e7;
+    color: #d69e2e;
+    border: 1px solid #fbb040;
+}
+
+.member-level.normal {
+    background: #edf2f7;
+    color: #4a5568;
+    border: 1px solid #cbd5e0;
+}
+
+/* 消費統計 */
+.consumption-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    min-width: 0;
+}
+
+.stats-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.stats-label {
+    color: #718096;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.stats-value {
+    font-weight: 500;
+    color: #2d3748;
+    font-size: 13px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* 狀態標籤 */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    min-width: 70px;
+    white-space: nowrap;
+}
+
+.status-badge.active {
+    background: #c6f6d5;
+    color: #2f855a;
+    border: 1px solid #68d391;
+}
+
+.status-badge.inactive {
+    background: #fed7d7;
+    color: #c53030;
+    border: 1px solid #fc8181;
+}
+
 /* 分頁按鈕樣式 */
 .page-btn {
     padding: 8px 12px;
@@ -16,6 +279,8 @@
     cursor: pointer;
     border-radius: 4px;
     text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: 14px;
 }
 
 .page-btn:hover {
@@ -36,17 +301,91 @@
     align-items: center;
     margin-top: 20px;
     padding: 15px 0;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
+    gap: 15px;
 }
 
 .page-size {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.page-size select {
+    height: 32px;
+    padding: 4px 8px;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #495057;
 }
 
 #membersPagination {
     display: flex;
     align-items: center;
+    gap: 5px;
+}
+
+/* 批量操作 */
+.bulk-actions {
+    display: none;
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+    gap: 10px;
+    align-items: center;
+}
+
+.bulk-actions.show {
+    display: flex;
+}
+
+/* Modal 樣式修正 */
+.modal {
+    z-index: 1055;
+}
+
+.modal-backdrop {
+    z-index: 1054;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block !important;
+}
+
+.modal.fade.show {
+    opacity: 1;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
+/* 表單區域 */
+.form-section {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.form-section h6 {
+    margin-bottom: 15px;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 1rem;
 }
 
 /* 響應式調整 */
@@ -54,10 +393,98 @@
     .pagination-controls {
         flex-direction: column;
         gap: 15px;
+        align-items: center;
     }
     
     .page-btn {
         padding: 6px 10px;
-        font-size: 0.9rem;
+        font-size: 13px;
+    }
+    
+    .member-info {
+        gap: 8px;
+    }
+    
+    .member-info .member-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .member-info .member-name {
+        font-size: 13px;
+    }
+    
+    .member-info .member-id {
+        font-size: 11px;
+    }
+    
+    .consumption-stats {
+        font-size: 12px;
+    }
+    
+    .stats-label {
+        font-size: 11px;
+    }
+    
+    .stats-value {
+        font-size: 12px;
+    }
+    
+    .action-buttons .btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+    
+    .action-buttons .btn-sm {
+        min-width: 28px;
+        height: 28px;
+        font-size: 11px;
+    }
+    
+    .contact-info div:first-child {
+        font-size: 13px;
+    }
+    
+    .contact-info div:last-child {
+        font-size: 12px;
+    }
+    
+    .status-badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        min-width: 60px;
+    }
+    
+    .member-level {
+        font-size: 11px;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    /* 表格響應式處理 */
+    .table th:nth-child(4),
+    .table td:nth-child(4),
+    .table th:nth-child(6),
+    .table td:nth-child(6),
+    .table th:nth-child(7),
+    .table td:nth-child(7) {
+        display: none;
+    }
+    
+    .pagination .page-link {
+        min-width: 32px;
+        height: 32px;
+        font-size: 13px;
+    }
+    
+    .member-info .member-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .action-buttons {
+        gap: 4px;
     }
 }

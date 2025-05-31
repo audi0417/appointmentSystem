@@ -52,9 +52,12 @@
         <div class="calendar-section">
             <div class="section-header">
                 <h2>預約行事曆</h2>
-                <button class="btn btn-primary btn-new">新增預約</button>
+                <!-- 移除重複的新增預約按鈕，因為已有點擊空白日期的功能 -->
             </div>
             <div id="calendar"></div>
+            <div class="calendar-click-hint">
+                💡 點擊空白日期可新增預約
+            </div>
         </div>
 
         <!-- 待辦事項區域 -->
@@ -67,7 +70,7 @@
                 <div class="task-item" data-id="1">
                     <div class="task-content">
                         <input type="checkbox">
-                        <span>聯絡陳小姐確認明天的預約時間</span>
+                        <span title="聯絡陳小姐確認明天的預約時間">聯絡陳小姐確認明天的預約時間</span>
                     </div>
                     <div class="task-meta">
                         <span class="priority high">高優先</span>
@@ -78,7 +81,7 @@
                 <div class="task-item" data-id="2">
                     <div class="task-content">
                         <input type="checkbox">
-                        <span>補充指緣油庫存</span>
+                        <span title="補充指緣油庫存">補充指緣油庫存</span>
                     </div>
                     <div class="task-meta">
                         <span class="priority medium">中優先</span>
@@ -89,67 +92,13 @@
                 <div class="task-item" data-id="3">
                     <div class="task-content">
                         <input type="checkbox">
-                        <span>更新作品集照片</span>
+                        <span title="更新作品集照片">更新作品集照片</span>
                     </div>
                     <div class="task-meta">
                         <span class="priority low">低優先</span>
                         <span class="due-time">本週</span>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 第二個網格區域 -->
-    <div class="dashboard-grid">
-        <!-- 最新預約區域 -->
-        <div class="recent-bookings">
-            <div class="section-header">
-                <h2>最新預約</h2>
-                <a href="#appointments" class="view-all">查看全部</a>
-            </div>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>客戶名稱</th>
-                            <th>預約項目</th>
-                            <th>預約時間</th>
-                            <th>狀態</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr data-id="1">
-                            <td class="customer-info">
-                                <img src="avatar1.png" alt="Customer" class="avatar">
-                                林小姐
-                            </td>
-                            <td>基礎保養 + 凝膠</td>
-                            <td>2024/11/25 14:30</td>
-                            <td><span class="status pending">待確認</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-confirm">確認</button>
-                                <button class="btn btn-sm btn-cancel">取消</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- 銷售分析區域 -->
-        <div class="sales-analytics">
-            <div class="section-header">
-                <h2>銷售分析</h2>
-                <div class="period-selector">
-                    <button class="active">週</button>
-                    <button>月</button>
-                    <button>年</button>
-                </div>
-            </div>
-            <div class="chart-container">
-                <canvas id="salesChart"></canvas>
             </div>
         </div>
     </div>

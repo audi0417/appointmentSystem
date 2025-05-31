@@ -97,39 +97,24 @@
 /* 操作按鈕區 */
 .service-actions {
     display: flex;
-    gap: 10px;
+    gap: 6px;
     padding: 15px 20px;
-    border-top: 1px solid #edf2f7;  /* 添加分隔線 */
+    border-top: 1px solid #edf2f7;
+    align-items: center;
 }
 
-.service-actions .action-btn {
-    width: 36px;
+.service-actions .btn {
+    min-width: 36px;
     height: 36px;
-    border-radius: 8px;
-    border: none;
-    background: none;
-    color: #718096;
-    transition: all 0.2s ease;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.service-actions .action-btn:hover {
-    background: #f7fafc;
-    color: #2d3748;
-}
-
-.service-actions .action-btn.edit:hover {
-    color: #3182ce;
-}
-
-.service-actions .action-btn.delete:hover {
-    color: #e53e3e;
-}
-
-.service-actions .action-btn.toggle:hover {
-    color: #38a169;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 /* 圖片上傳預覽 */
 .image-preview {
@@ -145,10 +130,38 @@
     height: auto;
 }
 
+/* Modal樣式修正 */
+.modal {
+    z-index: 1055;
+}
+
+.modal-backdrop {
+    z-index: 1054;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal.show {
+    display: block !important;
+}
+
+.modal.fade.show {
+    opacity: 1;
+}
+
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+
 /* 響應式調整 */
 @media (max-width: 768px) {
     .services-grid {
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+    
+    .service-actions .btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 12px;
     }
 }
 

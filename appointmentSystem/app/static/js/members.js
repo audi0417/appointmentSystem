@@ -164,7 +164,7 @@ function initializeMembers() {
     
             paginatedMembers.forEach(member => {
                 const tr = document.createElement('tr');
-                tr.setAttribute('data-member-id', member.id); // 為高亮效果添加屬性
+                tr.setAttribute('data-member-id', member.id);
                 tr.innerHTML = `
                     <td>
                         <input type="checkbox" class="form-check-input member-checkbox">
@@ -214,10 +214,10 @@ function initializeMembers() {
                     </td>
                     <td>
                         <div class="action-buttons">
-                            <button onclick="window.memberManager?.editMember(${member.id})" class="action-btn btn-edit" title="編輯">
+                            <button onclick="window.memberManager?.editMember(${member.id})" class="btn btn-sm btn-outline-primary" title="編輯">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button onclick="window.memberManager?.deleteMember(${member.id})" class="action-btn btn-delete" title="刪除">
+                            <button onclick="window.memberManager?.deleteMember(${member.id})" class="btn btn-sm btn-outline-danger" title="刪除">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
